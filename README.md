@@ -2,7 +2,7 @@
 
 Scratchable widget which temporarily hides content from user.
 
-[![Version](https://img.shields.io/badge/version-0.0.2-blue.svg)](https://pub.dartlang.org/packages/scratcher)
+[![Version](https://img.shields.io/badge/version-0.0.3-blue.svg)](https://pub.dartlang.org/packages/scratcher)
 
 ## Features
 
@@ -11,16 +11,16 @@ Scratchable widget which temporarily hides content from user.
 - Smooth calculations
 - Fully configurable
 
-![Screen 1](/screens/screen_1.png?raw=true "Screen #1")
-![Screen 2](/screens/screen_2.png?raw=true "Screen #2")
-![Screen 3](/screens/screen_3.png?raw=true "Screen #3")
+![Screen 1](https://github.com/vintage/scratcher/blob/master/screens/screen_1.png?raw=true "Screen #1")
+![Screen 2](https://github.com/vintage/scratcher/blob/master/screens/screen_2.png?raw=true "Screen #2")
+![Screen 3](https://github.com/vintage/scratcher/blob/master/screens/screen_3.png?raw=true "Screen #3")
 
 ## Getting started
 
 You should ensure that you add the scratcher as a dependency in your Flutter project.
 ```yaml
 dependencies:
- scratcher: "^0.0.2"
+ scratcher: "^0.0.3"
 ```
 
 You should then run `flutter packages upgrade` or update your packages in IntelliJ.

@@ -1,3 +1,7 @@
+## 0.0.3
+
+* Readme images
+
 ## 0.0.2
 
 * Extend documentation
