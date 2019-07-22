@@ -1,16 +1,17 @@
 name: scratcher
 description: Scratchable widget which temporarily hides content from user. Supports color & image area.
-version: 0.0.4
+version: 0.0.5
 author: Kamil Rykowski <kamil.rykowski@gmail.com>
 homepage: https://github.com/vintage/scratcher
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
 dev_dependencies:
+  pedantic: ^1.7.0
   flutter_test:
     sdk: flutter

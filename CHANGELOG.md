@@ -1,6 +1,10 @@
+## 0.0.5
+
+* Improve code quality (pedantic)
+
 ## 0.0.4
 
-* Fix scratcher size  
+* Fix scratcher size
 
 ## 0.0.3
 
@@ -10,7 +14,6 @@
 
 * Extend documentation
 * Add example project
-
 
 ## 0.0.1
 

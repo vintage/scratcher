@@ -2,7 +2,7 @@
 
 Scratchable widget which temporarily hides content from user.
 
-[![Version](https://img.shields.io/badge/version-0.0.4-blue.svg)](https://pub.dartlang.org/packages/scratcher)
+[![Version](https://img.shields.io/badge/version-0.0.5-blue.svg)](https://pub.dartlang.org/packages/scratcher)
 
 ## Features
 
@@ -20,7 +20,7 @@ Scratchable widget which temporarily hides content from user.
 You should ensure that you add the scratcher as a dependency in your Flutter project.
 ```yaml
 dependencies:
- scratcher: "^0.0.4"
+ scratcher: "^0.0.5"
 ```
 
 You should then run `flutter packages upgrade` or update your packages in IntelliJ.

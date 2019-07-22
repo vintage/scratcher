@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
+/// Custom painter object which handles revealing of color/image
 class ScratchPainter extends CustomPainter {
   ScratchPainter({
     this.points,
@@ -12,12 +13,23 @@ class ScratchPainter extends CustomPainter {
     this.onPaint,
   });
 
+  /// List of revealed points from scratcher
   final List<Offset> points;
+
+  /// Size of the brush used during reveal
   final double brushSize;
+
+  /// Background color of the scratch area
   final Color color;
+
+  /// Path to local image which can be used as scratch area
   final ui.Image image;
+
+  /// Determine how the image should fit the scratch area
   final BoxFit imageFit;
-  final Function onPaint;
+
+  /// Callback called after each repaint
+  final Function(Size) onPaint;
 
   Paint get mainPaint {
     var paint = Paint()
@@ -37,17 +49,16 @@ class ScratchPainter extends CustomPainter {
     var areaRect = Rect.fromLTRB(0, 0, size.width, size.height);
     canvas.drawRect(areaRect, Paint()..color = color);
     if (image != null) {
-      final Size imageSize =
-          Size(image.width.toDouble(), image.height.toDouble());
-      final FittedSizes sizes = applyBoxFit(imageFit, imageSize, size);
-      final Rect inputSubrect =
+      var imageSize = Size(image.width.toDouble(), image.height.toDouble());
+      var sizes = applyBoxFit(imageFit, imageSize, size);
+      var inputSubrect =
           Alignment.center.inscribe(sizes.source, Offset.zero & imageSize);
-      final Rect outputSubrect = Alignment.center.inscribe(
-          sizes.destination, areaRect);
+      var outputSubrect =
+          Alignment.center.inscribe(sizes.destination, areaRect);
       canvas.drawImageRect(image, inputSubrect, outputSubrect, Paint());
     }
 
-    for (int i = 0; i < points.length - 1; i++) {
+    for (var i = 0; i < points.length - 1; i++) {
       var current = points[i];
       if (current == null) {
         continue;
@@ -55,7 +66,7 @@ class ScratchPainter extends CustomPainter {
 
       var next = points[i + 1];
       if (next == null) {
-        List<Offset> offsetPoints = [
+        var offsetPoints = <Offset>[
           current,
           Offset(current.dx + 0.1, current.dy + 0.1)
         ];

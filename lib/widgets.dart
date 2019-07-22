@@ -6,8 +6,9 @@ import 'package:flutter/services.dart';
 
 import 'painter.dart';
 
-const PROGRESS_REPORT_STEP = 0.1;
+const progressReportStep = 0.1;
 
+/// Scratcher widget which covers given child with scratchable overlay
 class Scratcher extends StatefulWidget {
   @override
   _ScratcherState createState() => _ScratcherState();
@@ -24,13 +25,21 @@ class Scratcher extends StatefulWidget {
     this.onThreshold,
   }) : super(key: key);
 
+  /// Widget to draw under scratch area
   final Widget child;
+  /// Percentage level of scratch area which should be revealed
   final double threshold;
+  /// Size of the brush used during reveal
   final double brushSize;
+  /// Background color of the scratch area
   final Color color;
+  /// Path to local image which can be used as scratch area
   final String imagePath;
+  /// Determine how the image should fit the scratch area
   final BoxFit imageFit;
+  /// Callback called when new part of area is revealed
   final Function(double value) onChange;
+  /// Callback called when threshold is reached
   final Function() onThreshold;
 }
 
@@ -39,7 +48,7 @@ class _ScratcherState extends State<Scratcher> {
 
   List<Offset> points = [];
   Set<Offset> checkpoints;
-  Set<Offset> checked = Set();
+  Set<Offset> checked = {};
   int totalCheckpoints;
   double progress = 0;
   double progressReported = 0;
@@ -57,6 +66,7 @@ class _ScratcherState extends State<Scratcher> {
     super.initState();
   }
 
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<ui.Image>(
       future: imageLoader,
@@ -92,15 +102,15 @@ class _ScratcherState extends State<Scratcher> {
   }
 
   Future<ui.Image> loadImage(String asset) async {
-    ByteData data = await rootBundle.load(asset);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
-    ui.FrameInfo fi = await codec.getNextFrame();
+    var data = await rootBundle.load(asset);
+    var codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
+    var fi = await codec.getNextFrame();
     return fi.image;
   }
 
   void addPoint(Offset globalPosition) {
-    RenderBox renderBox = context.findRenderObject();
-    Offset point = renderBox.globalToLocal(globalPosition);
+    var renderBox = context.findRenderObject() as RenderBox;
+    var point = renderBox.globalToLocal(globalPosition);
 
     setState(() {
       points.add(point);
@@ -109,8 +119,8 @@ class _ScratcherState extends State<Scratcher> {
     if (!checked.contains(point)) {
       checked.add(point);
 
-      Set<Offset> reached = Set();
-      checkpoints.forEach((checkpoint) {
+      var reached = <Offset>{};
+      for (var checkpoint in checkpoints) {
         var xDiff = (checkpoint.dx - point.dx).abs();
         var yDiff = (checkpoint.dy - point.dy).abs();
         var radius = widget.brushSize / 2;
@@ -118,11 +128,11 @@ class _ScratcherState extends State<Scratcher> {
         if (xDiff < radius && yDiff < radius) {
           reached.add(checkpoint);
         }
-      });
+      }
 
       checkpoints = checkpoints.difference(reached);
       progress = (totalCheckpoints - checkpoints.length) / 100;
-      if (progress - progressReported >= PROGRESS_REPORT_STEP) {
+      if (progress - progressReported >= progressReportStep) {
         progressReported = progress;
         widget.onChange?.call(progress);
       }
@@ -146,12 +156,12 @@ class _ScratcherState extends State<Scratcher> {
   }
 
   List<Offset> _calculateCheckpoints(Size size) {
-    double xOffset = size.width / 100;
-    double yOffset = size.height / 100;
+    var xOffset = size.width / 100;
+    var yOffset = size.height / 100;
 
-    List<Offset> points = [];
-    for (int x = 0; x < 100; x++) {
-      for (int y = 0; y < 100; y++) {
+    var points = <Offset>[];
+    for (var x = 0; x < 100; x++) {
+      for (var y = 0; y < 100; y++) {
         points.add(Offset(
           x * xOffset,
           y * yOffset,

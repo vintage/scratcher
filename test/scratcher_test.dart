@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:scratcher/scratcher.dart';
 
 void main() {
-  test("ScratchPainter has correct paint", () {
+  test('ScratchPainter has correct paint', () {
     var painter = ScratchPainter(brushSize: 10);
     var paint = painter.mainPaint;
 

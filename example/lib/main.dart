@@ -46,8 +46,8 @@ class _MyAppState extends State<MyApp> {
                     children: <Widget>[
                       Text(
                         isOver
-                            ? "Congratulations, you won!"
-                            : "Scratch the screen!",
+                            ? 'Congratulations, you won!'
+                            : 'Scratch the screen!',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 24, color: Colors.amber),
                       ),
@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
               bottom: 10,
               right: 10,
               child: Text(
-                "${progress.toString()}%",
+                '${progress.toString()}%',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 40,
