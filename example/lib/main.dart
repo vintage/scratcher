@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'scratcher.dart';
+import 'package:scratcher/scratcher.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,16 +25,14 @@ class _MyAppState extends State<MyApp> {
           children: [
             Scratcher(
               brushSize: 30,
-              threshold: 80,
+              threshold: 50,
               color: Colors.red,
               onChange: (value) {
-                print("Progress: $value%");
                 setState(() {
                   progress = value;
                 });
               },
               onThreshold: () {
-                print("Threshold reached.");
                 setState(() {
                   isOver = true;
                 });

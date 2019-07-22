@@ -1,90 +1,54 @@
 # scratcher
 
-Scratchable widget which temporarily hides content from user. Supports color & image area.
+Scratchable widget which temporarily hides content from user.
 
-## Usage
+[![Version](https://img.shields.io/badge/version-0.0.1-blue.svg)](https://pub.dartlang.org/packages/scratcher)
 
-Example app can be found in (lib/example.dart)[lib/example.dart]
+## Features
+
+- Cover content with color
+- Cover content with image
+- Smooth calculations
+- Fully configurable
+
+![Screen 1](/screens/screen_1.png?raw=true "Screen #1")
+![Screen 2](/screens/screen_2.png?raw=true "Screen #2")
+![Screen 3](/screens/screen_3.png?raw=true "Screen #3")
+
+## Getting started
+
+You should ensure that you add the scratcher as a dependency in your Flutter project.
+```yaml
+dependencies:
+ scratcher: "^0.0.1"
+```
+
+You should then run `flutter packages upgrade` or update your packages in IntelliJ.
+
+## Example Project
+
+There is a crazy example project in the `example` folder. Check it out to see most of the available options.
+
+## Setting up
+
+First, you need to import the scratcher:
+```dart
+import 'package:scratcher/scratcher.dart';
+```
+
+Now you are ready to cover any widget with the scratchy area:
 
 ```dart
-import 'package:flutter/material.dart';
-
-import 'scratcher.dart';
-
-void main() => runApp(MyApp());
-
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  bool isOver = false;
-  double progress = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        body: Stack(
-          children: [
-            Scratcher(
-              brushSize: 30,
-              threshold: 80,
-              color: Colors.red,
-              onChange: (value) {
-                print("Progress: $value%");
-                setState(() {
-                  progress = value;
-                });
-              },
-              onThreshold: () {
-                print("Threshold reached.");
-                setState(() {
-                  isOver = true;
-                });
-              },
-              child: Container(
-                height: 700,
-                width: double.infinity,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        isOver
-                            ? "Congratulations, you won!"
-                            : "Scratch the screen!",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 24, color: Colors.amber),
-                      ),
-                    ],
-                  ),
-                ),
-                color: Colors.grey,
-              ),
-            ),
-            Positioned(
-              bottom: 10,
-              right: 10,
-              child: Text(
-                "${progress.toString()}%",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 40,
-                  color: Colors.amberAccent,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+Scratcher(
+  brushSize: 30,
+  threshold: 50,
+  color: Colors.red,
+  onChange: (value) { print("Scratch progress: $value%"); },
+  onThreshold: () { print("Threshold reached, you won!"); },
+  child: Container(
+    height: 300,
+    width: 300,
+    color: Colors.blue,
+  ),
+)
 ```
