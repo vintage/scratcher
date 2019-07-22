@@ -34,7 +34,8 @@ class ScratchPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.saveLayer(null, Paint());
 
-    canvas.drawColor(color, BlendMode.color);
+    var areaRect = Rect.fromLTRB(0, 0, size.width, size.height);
+    canvas.drawRect(areaRect, Paint()..color = color);
     if (image != null) {
       final Size imageSize =
           Size(image.width.toDouble(), image.height.toDouble());
@@ -42,7 +43,7 @@ class ScratchPainter extends CustomPainter {
       final Rect inputSubrect =
           Alignment.center.inscribe(sizes.source, Offset.zero & imageSize);
       final Rect outputSubrect = Alignment.center.inscribe(
-          sizes.destination, Rect.fromLTRB(0, 0, size.width, size.height));
+          sizes.destination, areaRect);
       canvas.drawImageRect(image, inputSubrect, outputSubrect, Paint());
     }
 

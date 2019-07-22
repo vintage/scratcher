@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Fix scratcher size  
+
 ## 0.0.3
 
 * Readme images
