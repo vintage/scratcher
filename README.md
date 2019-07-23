@@ -1,8 +1,8 @@
 # scratcher
 
-Scratchable widget which temporarily hides content from user.
+Scratch card widget which temporarily hides content from user.
 
-[![Version](https://img.shields.io/badge/version-0.0.5-blue.svg)](https://pub.dartlang.org/packages/scratcher)
+[![Version](https://img.shields.io/badge/pub-v0.0.5-blue.svg)](https://pub.dartlang.org/packages/scratcher)
 
 ## Features
 

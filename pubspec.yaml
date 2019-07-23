@@ -1,5 +1,5 @@
 name: scratcher
-description: Scratchable widget which temporarily hides content from user. Supports color & image area.
+description: Scratch card widget which temporarily hides content from user.
 version: 0.0.5
 author: Kamil Rykowski <kamil.rykowski@gmail.com>
 homepage: https://github.com/vintage/scratcher

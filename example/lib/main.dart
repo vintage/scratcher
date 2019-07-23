@@ -9,16 +9,48 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  bool isOver = false;
-  double progress = 0;
+class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
+  double validScratches = 0;
+  AnimationController _animationController;
+  Animation<double> _animation;
+
+  @override
+  void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 400))
+          ..addStatusListener((listener) {
+            if (listener == AnimationStatus.completed) {
+              _animationController.reverse();
+            }
+          });
+    _animation = Tween(begin: 1.0, end: 1.25).animate(CurvedAnimation(
+        parent: _animationController, curve: Curves.elasticIn));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   Widget buildRow(IconData iconLeft, IconData iconRight) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ScratchBox(icon: iconLeft),
-        ScratchBox(icon: Icons.stars),
+        ScratchBox(
+          icon: Icons.stars,
+          animation: _animation,
+          onScratch: () {
+            setState(() {
+              validScratches++;
+              if (validScratches == 3) {
+                _animationController.forward();
+              }
+            });
+          },
+        ),
         ScratchBox(icon: iconRight),
       ],
     );

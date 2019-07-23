@@ -4,9 +4,13 @@ import 'package:scratcher/scratcher.dart';
 class ScratchBox extends StatefulWidget {
   ScratchBox({
     this.icon,
+    this.onScratch,
+    this.animation,
   });
 
   final IconData icon;
+  final VoidCallback onScratch;
+  final Animation<double> animation;
 
   @override
   _ScratchBoxState createState() => _ScratchBoxState();
@@ -29,6 +33,12 @@ class _ScratchBoxState extends State<ScratchBox>
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: 80,
@@ -44,15 +54,25 @@ class _ScratchBoxState extends State<ScratchBox>
           setState(() {
             isScratched = true;
           });
+          widget.onScratch?.call();
         },
         child: Center(
           child: AnimatedBuilder(
             animation: _animationController,
             builder: (context, child) {
-              return Icon(
+              var icon = Icon(
                 widget.icon,
                 color: _colorTween.value,
                 size: 70,
+              );
+
+              if (widget.animation == null) {
+                return icon;
+              }
+
+              return ScaleTransition(
+                scale: widget.animation,
+                child: icon,
               );
             },
           ),
