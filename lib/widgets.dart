@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -8,7 +9,27 @@ import 'painter.dart';
 
 const progressReportStep = 0.1;
 
-/// Scratcher widget which covers given child with scratchable overlay
+/// How accurate should the progress be tracked.
+enum ScratchAccuracy {
+  /// Low accuracy, higher performance.
+  low,
+
+  /// High accuracy, lower performance.
+  high,
+}
+
+double _getAccuracyValue(ScratchAccuracy accuracy) {
+  switch (accuracy) {
+    case ScratchAccuracy.low:
+      return 10.0;
+    case ScratchAccuracy.high:
+      return 100.0;
+  }
+
+  return 0;
+}
+
+/// Scratcher widget which covers given child with scratchable overlay.
 class Scratcher extends StatefulWidget {
   @override
   _ScratcherState createState() => _ScratcherState();
@@ -18,6 +39,7 @@ class Scratcher extends StatefulWidget {
     @required this.child,
     this.threshold,
     this.brushSize = 25,
+    this.accuracy = ScratchAccuracy.high,
     this.color = Colors.black,
     this.imagePath,
     this.imageFit = BoxFit.cover,
@@ -25,21 +47,32 @@ class Scratcher extends StatefulWidget {
     this.onThreshold,
   }) : super(key: key);
 
-  /// Widget to draw under scratch area
+  /// Widget to draw under scratch area.
   final Widget child;
-  /// Percentage level of scratch area which should be revealed
+
+  /// Percentage level of scratch area which should be revealed.
   final double threshold;
-  /// Size of the brush used during reveal
+
+  /// Size of the brush used during reveal.
   final double brushSize;
-  /// Background color of the scratch area
+
+  /// Defines how accurate the progress should be tracked.
+  /// Lower accuracy means better performance.
+  final ScratchAccuracy accuracy;
+
+  /// Background color of the scratch area.
   final Color color;
-  /// Path to local image which can be used as scratch area
+
+  /// Path to local image which can be used as scratch area.
   final String imagePath;
-  /// Determine how the image should fit the scratch area
+
+  /// Determine how the image should fit the scratch area.
   final BoxFit imageFit;
-  /// Callback called when new part of area is revealed
+
+  /// Callback called when new part of area is revealed.
   final Function(double value) onChange;
-  /// Callback called when threshold is reached
+
+  /// Callback called when threshold is reached.
   final Function() onThreshold;
 }
 
@@ -73,6 +106,7 @@ class _ScratcherState extends State<Scratcher> {
       builder: (BuildContext context, AsyncSnapshot<ui.Image> snapshot) {
         if (snapshot.connectionState != ConnectionState.waiting) {
           return GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onPanStart: (details) {
               addPoint(details.globalPosition);
             },
@@ -108,6 +142,15 @@ class _ScratcherState extends State<Scratcher> {
     return fi.image;
   }
 
+  bool _inCircle(Offset center, Offset point, double radius) {
+    var dX = center.dx - point.dx;
+    var dY = center.dy - point.dy;
+    var multi = dX * dX + dY * dY;
+    var distance = sqrt(multi).roundToDouble();
+
+    return distance <= radius;
+  }
+
   void addPoint(Offset globalPosition) {
     var renderBox = context.findRenderObject() as RenderBox;
     var point = renderBox.globalToLocal(globalPosition);
@@ -121,17 +164,15 @@ class _ScratcherState extends State<Scratcher> {
 
       var reached = <Offset>{};
       for (var checkpoint in checkpoints) {
-        var xDiff = (checkpoint.dx - point.dx).abs();
-        var yDiff = (checkpoint.dy - point.dy).abs();
         var radius = widget.brushSize / 2;
-
-        if (xDiff < radius && yDiff < radius) {
+        if (_inCircle(checkpoint, point, radius)) {
           reached.add(checkpoint);
         }
       }
 
       checkpoints = checkpoints.difference(reached);
-      progress = (totalCheckpoints - checkpoints.length) / 100;
+      progress =
+          ((totalCheckpoints - checkpoints.length) / totalCheckpoints) * 100;
       if (progress - progressReported >= progressReportStep) {
         progressReported = progress;
         widget.onChange?.call(progress);
@@ -156,16 +197,18 @@ class _ScratcherState extends State<Scratcher> {
   }
 
   List<Offset> _calculateCheckpoints(Size size) {
-    var xOffset = size.width / 100;
-    var yOffset = size.height / 100;
+    var accuracy = _getAccuracyValue(widget.accuracy);
+    var xOffset = size.width / accuracy;
+    var yOffset = size.height / accuracy;
 
     var points = <Offset>[];
-    for (var x = 0; x < 100; x++) {
-      for (var y = 0; y < 100; y++) {
-        points.add(Offset(
+    for (var x = 0; x < accuracy; x++) {
+      for (var y = 0; y < accuracy; y++) {
+        var point = Offset(
           x * xOffset,
           y * yOffset,
-        ));
+        );
+        points.add(point);
       }
     }
 

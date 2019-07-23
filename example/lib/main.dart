@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:scratcher/scratcher.dart';
+import 'scratch_box.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,64 +13,45 @@ class _MyAppState extends State<MyApp> {
   bool isOver = false;
   double progress = 0;
 
+  Widget buildRow(IconData iconLeft, IconData iconRight) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ScratchBox(icon: iconLeft),
+        ScratchBox(icon: Icons.stars),
+        ScratchBox(icon: iconRight),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-        body: Stack(
-          children: [
-            Scratcher(
-              brushSize: 30,
-              threshold: 50,
-              color: Colors.red,
-              onChange: (value) {
-                setState(() {
-                  progress = value;
-                });
-              },
-              onThreshold: () {
-                setState(() {
-                  isOver = true;
-                });
-              },
-              child: Container(
-                height: 700,
-                width: double.infinity,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        isOver
-                            ? 'Congratulations, you won!'
-                            : 'Scratch the screen!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 24, color: Colors.amber),
-                      ),
-                    ],
-                  ),
-                ),
-                color: Colors.grey,
-              ),
-            ),
-            Positioned(
-              bottom: 10,
-              right: 10,
-              child: Text(
-                '${progress.toString()}%',
+        backgroundColor: Colors.green[500],
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                'Scratcher',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 40,
-                  color: Colors.amberAccent,
+                  color: Colors.green[100],
+                  fontSize: 32,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-          ],
+              buildRow(Icons.android, Icons.lightbulb_outline),
+              buildRow(Icons.audiotrack, Icons.monetization_on),
+              buildRow(Icons.android, Icons.monetization_on),
+            ],
+          ),
         ),
       ),
     );

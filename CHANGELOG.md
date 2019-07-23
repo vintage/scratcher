@@ -1,3 +1,9 @@
+## Dev
+
+* Added Scratcher.accuracy parameter to control performance for many scratch cards displayed in single screen
+* Improved algorithm calculating the progress
+* More fun & complex example
+
 ## 0.0.5
 
 * Improve code quality (pedantic)
