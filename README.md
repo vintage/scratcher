@@ -2,41 +2,35 @@
 
 Scratch card widget which temporarily hides content from user.
 
-[![Version](https://img.shields.io/badge/pub-v0.0.5-blue.svg)](https://pub.dartlang.org/packages/scratcher)
+[![Version](https://img.shields.io/badge/pub-v1.0.0-blue.svg)](https://pub.dartlang.org/packages/scratcher)
+
+![Demo](https://media.giphy.com/media/fXztsRTXoKsVuChtTl/giphy.gif)
 
 ## Features
 
-- Cover content with color
-- Cover content with image
-- Smooth calculations
+- Android and iOS support
+- Cover content with full color or custom image 
+- Track the scratch progress and threshold
 - Fully configurable
-
-![Screen 1](https://github.com/vintage/scratcher/blob/master/screens/screen_1.png?raw=true "Screen #1")
-![Screen 2](https://github.com/vintage/scratcher/blob/master/screens/screen_2.png?raw=true "Screen #2")
-![Screen 3](https://github.com/vintage/scratcher/blob/master/screens/screen_3.png?raw=true "Screen #3")
 
 ## Getting started
 
-You should ensure that you add the scratcher as a dependency in your Flutter project.
+1. First thing you need to do is adding the scratcher as a project dependency in `pubspec.yaml`:
 ```yaml
 dependencies:
- scratcher: "^0.0.5"
+ scratcher: "^1.0.0"
 ```
 
-You should then run `flutter packages upgrade` or update your packages in IntelliJ.
-
-## Example Project
-
-There is a crazy example project in the `example` folder. Check it out to see most of the available options.
+2. Now you can install it by running `flutter pub get` or through code editor.
 
 ## Setting up
 
-First, you need to import the scratcher:
+1. Import the library:
 ```dart
 import 'package:scratcher/scratcher.dart';
 ```
 
-Now you are ready to cover any widget with the scratchy area:
+2. Cover desired widget with the scratch card:
 
 ```dart
 Scratcher(
@@ -52,3 +46,21 @@ Scratcher(
   ),
 )
 ```
+
+## Properties
+
+Property | Type | Description
+--- | --- | ---
+child | Widget | Widget rendered under the scratch area.
+threshold | double | Percentage level of scratch area which should be revealed to complete.
+brushSize | double | Size of the brush. The bigger it is the faster user can scratch the card.
+accuracy | ScratchAccuracy | Determines how accurate the progress should be reported. Lower accuracy means higher performance.
+color | Color | Color used to cover the child widget.
+imagePath | String | Path to the local image asset which could be additionally used to cover the child widget.
+imageFit | BoxFit | Determines how the image should be drawn in case of remaining space (like contain or cover).
+onChange | Function | Callback called when new part of area is revealed (min 0.1% difference)
+onThreshold | Function | Callback called when threshold is reached (only when defined)
+
+## Example Project
+
+There is a crazy example project in the `example` folder. Check it out to see most of the available options.

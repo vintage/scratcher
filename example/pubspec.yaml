@@ -29,3 +29,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/
+
+  fonts:
+    - family: The unseen
+      fonts:
+        - asset: assets/unseen.ttf

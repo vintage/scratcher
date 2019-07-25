@@ -47,29 +47,31 @@ class Scratcher extends StatefulWidget {
     this.onThreshold,
   }) : super(key: key);
 
-  /// Widget to draw under scratch area.
+  /// Widget rendered under the scratch area.
   final Widget child;
 
-  /// Percentage level of scratch area which should be revealed.
+  /// Percentage level of scratch area which should be revealed to complete.
   final double threshold;
 
-  /// Size of the brush used during reveal.
+  /// Size of the brush. The bigger it is the faster user can scratch the card.
   final double brushSize;
 
-  /// Defines how accurate the progress should be tracked.
-  /// Lower accuracy means better performance.
+  /// Determines how accurate the progress should be reported.
+  /// Lower accuracy means higher performance.
   final ScratchAccuracy accuracy;
 
-  /// Background color of the scratch area.
+  /// Color used to cover the child widget.
   final Color color;
 
-  /// Path to local image which can be used as scratch area.
+  /// Path to the local image asset which could be additionally used to cover
+  /// the child widget.
   final String imagePath;
 
-  /// Determine how the image should fit the scratch area.
+  /// Determines how the image should be drawn in case of remaining space
+  /// (like contain or cover).
   final BoxFit imageFit;
 
-  /// Callback called when new part of area is revealed.
+  /// Callback called when new part of area is revealed (min 0.1% difference).
   final Function(double value) onChange;
 
   /// Callback called when threshold is reached.

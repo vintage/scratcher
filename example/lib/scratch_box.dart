@@ -3,12 +3,12 @@ import 'package:scratcher/scratcher.dart';
 
 class ScratchBox extends StatefulWidget {
   ScratchBox({
-    this.icon,
+    this.image,
     this.onScratch,
     this.animation,
   });
 
-  final IconData icon;
+  final String image;
   final VoidCallback onScratch;
   final Animation<double> animation;
 
@@ -16,30 +16,23 @@ class ScratchBox extends StatefulWidget {
   _ScratchBoxState createState() => _ScratchBoxState();
 }
 
-class _ScratchBoxState extends State<ScratchBox>
-    with SingleTickerProviderStateMixin {
+class _ScratchBoxState extends State<ScratchBox> {
   bool isScratched = false;
-  AnimationController _animationController;
-  Animation<Color> _colorTween;
-
-  @override
-  void initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
-    _colorTween = ColorTween(begin: Colors.blueGrey, end: Colors.blue[700])
-        .animate(_animationController);
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
+  double opacity = 0.5;
 
   @override
   Widget build(BuildContext context) {
+    var icon = AnimatedOpacity(
+      opacity: opacity,
+      duration: Duration(milliseconds: 750),
+      child: Image.asset(
+        widget.image,
+        width: 70,
+        height: 70,
+        fit: BoxFit.contain,
+      ),
+    );
+
     return Container(
       width: 80,
       height: 80,
@@ -47,35 +40,23 @@ class _ScratchBoxState extends State<ScratchBox>
       child: Scratcher(
         accuracy: ScratchAccuracy.low,
         color: Colors.blueGrey,
+        imagePath: 'assets/scratch.png',
         brushSize: 15,
         threshold: 60,
         onThreshold: () {
-          _animationController.forward();
           setState(() {
+            opacity = 1;
             isScratched = true;
           });
           widget.onScratch?.call();
         },
-        child: Center(
-          child: AnimatedBuilder(
-            animation: _animationController,
-            builder: (context, child) {
-              var icon = Icon(
-                widget.icon,
-                color: _colorTween.value,
-                size: 70,
-              );
-
-              if (widget.animation == null) {
-                return icon;
-              }
-
-              return ScaleTransition(
-                scale: widget.animation,
-                child: icon,
-              );
-            },
-          ),
+        child: Container(
+          child: widget.animation == null
+              ? icon
+              : ScaleTransition(
+                  scale: widget.animation,
+                  child: icon,
+                ),
         ),
       ),
     );

@@ -4,6 +4,10 @@ import 'scratch_box.dart';
 
 void main() => runApp(MyApp());
 
+const googleIcon = 'assets/google.png';
+const dartIcon = 'assets/dart.png';
+const flutterIcon = 'assets/flutter.png';
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -17,14 +21,20 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 400))
-          ..addStatusListener((listener) {
-            if (listener == AnimationStatus.completed) {
-              _animationController.reverse();
-            }
-          });
-    _animation = Tween(begin: 1.0, end: 1.25).animate(CurvedAnimation(
-        parent: _animationController, curve: Curves.elasticIn));
+        AnimationController(vsync: this, duration: Duration(milliseconds: 1200))
+          ..addStatusListener(
+            (listener) {
+              if (listener == AnimationStatus.completed) {
+                _animationController.reverse();
+              }
+            },
+          );
+    _animation = Tween(begin: 1.0, end: 1.25).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.elasticIn,
+      ),
+    );
     super.initState();
   }
 
@@ -34,13 +44,13 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  Widget buildRow(IconData iconLeft, IconData iconRight) {
+  Widget buildRow(String left, String center, String right) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ScratchBox(icon: iconLeft),
+        ScratchBox(image: left),
         ScratchBox(
-          icon: Icons.stars,
+          image: center,
           animation: _animation,
           onScratch: () {
             setState(() {
@@ -51,7 +61,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
             });
           },
         ),
-        ScratchBox(icon: iconRight),
+        ScratchBox(image: right),
       ],
     );
   }
@@ -65,23 +75,46 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-        backgroundColor: Colors.green[500],
+        backgroundColor: Colors.white,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                'Scratcher',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.green[100],
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Scratcher',
+                    style: TextStyle(
+                      fontFamily: 'The unseen',
+                      color: Colors.blueAccent,
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'scratch to win!',
+                    style: TextStyle(
+                      fontFamily: 'The unseen',
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    height: 1,
+                    width: 300,
+                    color: Colors.black12,
+                  )
+                ],
               ),
-              buildRow(Icons.android, Icons.lightbulb_outline),
-              buildRow(Icons.audiotrack, Icons.monetization_on),
-              buildRow(Icons.android, Icons.monetization_on),
+              buildRow(googleIcon, flutterIcon, googleIcon),
+              buildRow(
+                dartIcon,
+                flutterIcon,
+                googleIcon,
+              ),
+              buildRow(dartIcon, flutterIcon, dartIcon),
             ],
           ),
         ),

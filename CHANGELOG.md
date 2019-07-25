@@ -1,7 +1,8 @@
-## Dev
+## 1.0.0
 
-* Added Scratcher.accuracy parameter to control performance for many scratch cards displayed in single screen
+* Added accuracy parameter to control performance level
 * Improved algorithm calculating the progress
+* Fixed size of the scratch area
 * More fun & complex example
 
 ## 0.0.5
