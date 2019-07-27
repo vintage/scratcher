@@ -80,6 +80,7 @@ class Scratcher extends StatefulWidget {
 
 class _ScratcherState extends State<Scratcher> {
   Future<ui.Image> imageLoader;
+  Offset _lastPosition;
 
   List<Offset> points = [];
   Set<Offset> checkpoints;
@@ -154,6 +155,11 @@ class _ScratcherState extends State<Scratcher> {
   }
 
   void addPoint(Offset globalPosition) {
+    if (_lastPosition == globalPosition) {
+      return;
+    }
+    _lastPosition = globalPosition;
+
     var renderBox = context.findRenderObject() as RenderBox;
     var point = renderBox.globalToLocal(globalPosition);
 

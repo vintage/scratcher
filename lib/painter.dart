@@ -34,10 +34,10 @@ class ScratchPainter extends CustomPainter {
   Paint get mainPaint {
     var paint = Paint()
       ..strokeCap = StrokeCap.round
-      ..isAntiAlias = false
       ..color = Colors.transparent
       ..strokeWidth = brushSize
-      ..blendMode = BlendMode.src;
+      ..blendMode = BlendMode.src
+      ..style = PaintingStyle.stroke;
 
     return paint;
   }
@@ -58,25 +58,26 @@ class ScratchPainter extends CustomPainter {
       canvas.drawImageRect(image, inputSubrect, outputSubrect, Paint());
     }
 
-    for (var i = 0; i < points.length - 1; i++) {
-      var current = points[i];
-      if (current == null) {
-        continue;
-      }
-
-      var next = points[i + 1];
-      if (next == null) {
-        var offsetPoints = <Offset>[
-          current,
-          Offset(current.dx + 0.1, current.dy + 0.1)
-        ];
-        canvas.drawPoints(ui.PointMode.points, offsetPoints, mainPaint);
+    var path = Path();
+    var isStarted = false;
+    for (var point in points) {
+      if (point == null) {
+        canvas.drawPath(path, mainPaint);
+        path = Path();
+        isStarted = false;
       } else {
-        canvas.drawLine(current, next, mainPaint);
+        if (!isStarted) {
+          isStarted = true;
+          path.moveTo(point.dx, point.dy);
+        } else {
+          path.lineTo(point.dx, point.dy);
+        }
       }
     }
 
-    canvas.restore();
+    canvas
+      ..drawPath(path, mainPaint)
+      ..restore();
 
     this.onPaint(size);
   }
