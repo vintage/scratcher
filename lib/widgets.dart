@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:ui' as ui;
+import 'package:flutter_web_ui/ui.dart' as ui;
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_web/material.dart';
+import 'package:flutter_web/services.dart';
 
 import 'painter.dart';
 

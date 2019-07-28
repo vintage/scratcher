@@ -1,6 +1,6 @@
 name: scratcher
 description: Scratch card widget which temporarily hides content from user.
-version: 1.1.0
+version: 1.0.0
 author: Kamil Rykowski <kamil.rykowski@gmail.com>
 homepage: https://github.com/vintage/scratcher
 
@@ -8,10 +8,22 @@ environment:
   sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
+  flutter_web: any
 
 dev_dependencies:
-  pedantic: ^1.7.0
-  flutter_test:
-    sdk: flutter
+  build_runner: ^1.4.0
+  build_web_compilers: ^2.0.0
+
+dependency_overrides:
+  flutter_web:
+    git:
+      url: https://github.com/flutter/flutter_web
+      path: packages/flutter_web
+  flutter_web_ui:
+    git:
+      url: https://github.com/flutter/flutter_web
+      path: packages/flutter_web_ui
+  flutter_web_test:
+    git:
+      url: https://github.com/flutter/flutter_web
+      path: packages/flutter_web_test

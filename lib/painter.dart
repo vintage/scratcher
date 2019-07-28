@@ -1,6 +1,6 @@
-import 'dart:ui' as ui;
+import 'package:flutter_web_ui/ui.dart' as ui;
 
-import 'package:flutter/material.dart';
+import 'package:flutter_web/material.dart';
 
 /// Custom painter object which handles revealing of color/image
 class ScratchPainter extends CustomPainter {
