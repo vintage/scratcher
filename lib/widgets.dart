@@ -95,6 +95,10 @@ class _ScratcherState extends State<Scratcher> {
   double progressReported = 0;
   bool isFinished = false;
 
+  RenderBox get renderObject {
+    return context.findRenderObject() as RenderBox;
+  }
+
   @override
   void initState() {
     if (widget.imagePath == null) {
@@ -103,6 +107,9 @@ class _ScratcherState extends State<Scratcher> {
     } else {
       _imageLoader = loadImage(widget.imagePath);
     }
+
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => setCheckpoints(renderObject.size));
 
     super.initState();
   }
@@ -120,7 +127,6 @@ class _ScratcherState extends State<Scratcher> {
               points: points,
               brushSize: widget.brushSize,
               color: widget.color,
-              onPaint: onPaint,
             ),
             child: widget.child,
           );
@@ -128,19 +134,27 @@ class _ScratcherState extends State<Scratcher> {
 
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
-            onPanStart: canScratch ? (details) {
-              addPoint(details.globalPosition);
-            } : null,
-            onPanUpdate: canScratch ? (details) {
-              addPoint(details.globalPosition);
-            } : null,
-            onPanEnd: canScratch ? (details) => setState(() {
-              points.add(null);
-            }) : null,
-            child: widget.revealDuration == null ? paint : AnimatedSwitcher(
-              duration: widget.revealDuration,
-              child: isFinished ? widget.child : paint,
-            ),
+            onPanStart: canScratch
+                ? (details) {
+                    addPoint(details.globalPosition);
+                  }
+                : null,
+            onPanUpdate: canScratch
+                ? (details) {
+                    addPoint(details.globalPosition);
+                  }
+                : null,
+            onPanEnd: canScratch
+                ? (details) => setState(() {
+                      points.add(null);
+                    })
+                : null,
+            child: widget.revealDuration == null
+                ? paint
+                : AnimatedSwitcher(
+                    duration: widget.revealDuration,
+                    child: isFinished ? widget.child : paint,
+                  ),
           );
         }
 
@@ -166,13 +180,18 @@ class _ScratcherState extends State<Scratcher> {
   }
 
   void addPoint(Offset globalPosition) {
+    // Ignore when same point is reported multiple times in a row
     if (_lastPosition == globalPosition) {
       return;
     }
     _lastPosition = globalPosition;
 
-    var renderBox = context.findRenderObject() as RenderBox;
-    var point = renderBox.globalToLocal(globalPosition);
+    var point = renderObject.globalToLocal(globalPosition);
+
+    // Ignore when starting point of new line has been already scratched
+    if (points.isNotEmpty && points.last == null && points.contains(point)) {
+      return;
+    }
 
     setState(() {
       points.add(point);
@@ -206,16 +225,14 @@ class _ScratcherState extends State<Scratcher> {
     }
   }
 
-  void onPaint(Size size) {
-    if (checkpoints == null) {
-      var calculated = _calculateCheckpoints(size).toSet();
+  void setCheckpoints(Size size) {
+    var calculated = calculateCheckpoints(size).toSet();
 
-      checkpoints = calculated;
-      totalCheckpoints = calculated.length;
-    }
+    checkpoints = calculated;
+    totalCheckpoints = calculated.length;
   }
 
-  List<Offset> _calculateCheckpoints(Size size) {
+  List<Offset> calculateCheckpoints(Size size) {
     var accuracy = _getAccuracyValue(widget.accuracy);
     var xOffset = size.width / accuracy;
     var yOffset = size.height / accuracy;

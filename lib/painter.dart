@@ -10,7 +10,6 @@ class ScratchPainter extends CustomPainter {
     this.color,
     this.image,
     this.imageFit,
-    this.onPaint,
   });
 
   /// List of revealed points from scratcher
@@ -27,9 +26,6 @@ class ScratchPainter extends CustomPainter {
 
   /// Determine how the image should fit the scratch area
   final BoxFit imageFit;
-
-  /// Callback called after each repaint
-  final Function(Size) onPaint;
 
   Paint get mainPaint {
     var paint = Paint()
@@ -78,8 +74,6 @@ class ScratchPainter extends CustomPainter {
     canvas
       ..drawPath(path, mainPaint)
       ..restore();
-
-    this.onPaint(size);
   }
 
   @override
