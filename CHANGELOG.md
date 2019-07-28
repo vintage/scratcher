@@ -1,3 +1,8 @@
+## 1.1.0
+
+* Added revealDuration parameter to automatically reveal area on threshold
+* Major performance improvements
+
 ## 1.0.0
 
 * Added accuracy parameter to control performance level
