@@ -9,7 +9,6 @@ class BasicScreen extends StatefulWidget {
 
 class _BasicScreenState extends State<BasicScreen> {
   double progress = 0;
-  bool isOver = false;
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +16,12 @@ class _BasicScreenState extends State<BasicScreen> {
       children: [
         Scratcher(
           brushSize: 30,
-          threshold: 50,
+          threshold: 30,
+          revealDuration: Duration(milliseconds: 800),
           color: Colors.red,
           onChange: (value) {
             setState(() {
               progress = value;
-            });
-          },
-          onThreshold: () {
-            setState(() {
-              isOver = true;
             });
           },
           child: Container(
@@ -37,9 +32,7 @@ class _BasicScreenState extends State<BasicScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    isOver
-                        ? 'Congratulations, you won!'
-                        : 'Scratch the screen!',
+                    'Scratch the screen to win',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 24, color: Colors.amber),
                   ),

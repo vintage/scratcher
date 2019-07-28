@@ -55,11 +55,12 @@ child | Widget | Widget rendered under the scratch area.
 threshold | double | Percentage level of scratch area which should be revealed to complete.
 brushSize | double | Size of the brush. The bigger it is the faster user can scratch the card.
 accuracy | ScratchAccuracy | Determines how accurate the progress should be reported. Lower accuracy means higher performance.
+revealDuration | Duration | Fade out animation duration for unscratched area when threshold reached. When not defined - the remaining area won't disappear automatically (default).
 color | Color | Color used to cover the child widget.
 imagePath | String | Path to the local image asset which could be additionally used to cover the child widget.
 imageFit | BoxFit | Determines how the image should be drawn in case of remaining space (like contain or cover).
-onChange | Function | Callback called when new part of area is revealed (min 0.1% difference)
-onThreshold | Function | Callback called when threshold is reached (only when defined)
+onChange | Function | Callback called when new part of area is revealed (min 0.1% difference).
+onThreshold | Function | Callback called when threshold is reached (only when defined).
 
 ## Example Project
 

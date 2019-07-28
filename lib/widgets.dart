@@ -40,6 +40,7 @@ class Scratcher extends StatefulWidget {
     this.threshold,
     this.brushSize = 25,
     this.accuracy = ScratchAccuracy.high,
+    this.revealDuration,
     this.color = Colors.black,
     this.imagePath,
     this.imageFit = BoxFit.cover,
@@ -60,6 +61,10 @@ class Scratcher extends StatefulWidget {
   /// Lower accuracy means higher performance.
   final ScratchAccuracy accuracy;
 
+  /// Fade out animation duration for unscratched area when threshold reached.
+  /// When not defined - the remaining area won't disappear automatically.
+  final Duration revealDuration;
+
   /// Color used to cover the child widget.
   final Color color;
 
@@ -79,7 +84,7 @@ class Scratcher extends StatefulWidget {
 }
 
 class _ScratcherState extends State<Scratcher> {
-  Future<ui.Image> imageLoader;
+  Future<ui.Image> _imageLoader;
   Offset _lastPosition;
 
   List<Offset> points = [];
@@ -94,9 +99,9 @@ class _ScratcherState extends State<Scratcher> {
   void initState() {
     if (widget.imagePath == null) {
       var completer = Completer<ui.Image>()..complete();
-      imageLoader = completer.future;
+      _imageLoader = completer.future;
     } else {
-      imageLoader = loadImage(widget.imagePath);
+      _imageLoader = loadImage(widget.imagePath);
     }
 
     super.initState();
@@ -105,30 +110,36 @@ class _ScratcherState extends State<Scratcher> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<ui.Image>(
-      future: imageLoader,
+      future: _imageLoader,
       builder: (BuildContext context, AsyncSnapshot<ui.Image> snapshot) {
         if (snapshot.connectionState != ConnectionState.waiting) {
+          var paint = CustomPaint(
+            foregroundPainter: ScratchPainter(
+              image: snapshot.data,
+              imageFit: widget.imageFit,
+              points: points,
+              brushSize: widget.brushSize,
+              color: widget.color,
+              onPaint: onPaint,
+            ),
+            child: widget.child,
+          );
+          var canScratch = !(isFinished && widget.revealDuration != null);
+
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
-            onPanStart: (details) {
+            onPanStart: canScratch ? (details) {
               addPoint(details.globalPosition);
-            },
-            onPanUpdate: (details) {
+            } : null,
+            onPanUpdate: canScratch ? (details) {
               addPoint(details.globalPosition);
-            },
-            onPanEnd: (event) => setState(() {
+            } : null,
+            onPanEnd: canScratch ? (details) => setState(() {
               points.add(null);
-            }),
-            child: CustomPaint(
-              foregroundPainter: ScratchPainter(
-                image: snapshot.data,
-                imageFit: widget.imageFit,
-                points: points,
-                brushSize: widget.brushSize,
-                color: widget.color,
-                onPaint: onPaint,
-              ),
-              child: widget.child,
+            }) : null,
+            child: widget.revealDuration == null ? paint : AnimatedSwitcher(
+              duration: widget.revealDuration,
+              child: isFinished ? widget.child : paint,
             ),
           );
         }
