@@ -80,7 +80,7 @@ After assigning the key, you can call any exposed methods e.g.:
 RaisedButton(
   child: const Text('Reset'),
   onPressed: () {
-    key.currentState.reset(duration: Duration(milliseconds: 2000));
+    scratchKey.currentState.reset(duration: Duration(milliseconds: 2000));
   },
 );
 ```
