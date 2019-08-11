@@ -9,15 +9,16 @@ class BasicScreen extends StatefulWidget {
 
 class _BasicScreenState extends State<BasicScreen> {
   double progress = 0;
+  final key = GlobalKey<ScratcherState>();
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Scratcher(
+          key: key,
           brushSize: 30,
           threshold: 30,
-          revealDuration: Duration(milliseconds: 800),
           color: Colors.red,
           onChange: (value) {
             setState(() {
@@ -40,6 +41,26 @@ class _BasicScreenState extends State<BasicScreen> {
               ),
             ),
             color: Colors.grey,
+          ),
+        ),
+        Positioned(
+          top: 10,
+          left: 10,
+          child: RaisedButton(
+            child: const Text('Reset'),
+            onPressed: () {
+              key.currentState.reset(duration: Duration(milliseconds: 2000));
+            },
+          ),
+        ),
+        Positioned(
+          top: 10,
+          right: 10,
+          child: RaisedButton(
+            child: const Text('Reveal'),
+            onPressed: () {
+              key.currentState.reveal(duration: Duration(milliseconds: 2000));
+            },
           ),
         ),
         Positioned(

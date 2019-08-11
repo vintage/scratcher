@@ -1,3 +1,9 @@
+## 1.2.0
+
+* Removed revealDuration parameter - same effect can be now achieved through `reveal()` method
+* Added programmatic access to scratch widget - `reset()` and `reveal()` methods
+* Minor performance improvements and memory management 
+
 ## 1.1.0
 
 * Added revealDuration parameter to automatically reveal area on threshold
