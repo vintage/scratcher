@@ -90,7 +90,7 @@ class ScratcherState extends State<Scratcher> {
   List<Offset> points = [];
   Set<Offset> checkpoints;
   Set<Offset> checked = {};
-  int totalCheckpoints;
+  int totalCheckpoints = 0;
   double progress = 0;
   double progressReported = 0;
   bool thresholdReported = false;
@@ -111,9 +111,6 @@ class ScratcherState extends State<Scratcher> {
       _imageLoader = _loadImage(widget.imagePath);
     }
 
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _setCheckpoints(renderObject.size));
-
     super.initState();
   }
 
@@ -130,6 +127,11 @@ class ScratcherState extends State<Scratcher> {
               points: points,
               brushSize: widget.brushSize,
               color: widget.color,
+              onDraw: (size) {
+                if (totalCheckpoints == 0) {
+                  _setCheckpoints(size);
+                }
+              },
             ),
             child: widget.child,
           );

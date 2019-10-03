@@ -2,6 +2,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
+typedef DrawFunction(Size size);
+
 /// Custom painter object which handles revealing of color/image
 class ScratchPainter extends CustomPainter {
   ScratchPainter({
@@ -10,6 +12,7 @@ class ScratchPainter extends CustomPainter {
     this.color,
     this.image,
     this.imageFit,
+    this.onDraw,
   });
 
   /// List of revealed points from scratcher
@@ -27,6 +30,9 @@ class ScratchPainter extends CustomPainter {
   /// Determine how the image should fit the scratch area
   final BoxFit imageFit;
 
+  /// Callback called each time the painter is redraw
+  final DrawFunction onDraw;
+
   Paint get mainPaint {
     var paint = Paint()
       ..strokeCap = StrokeCap.round
@@ -40,6 +46,8 @@ class ScratchPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    onDraw(size);
+
     canvas.saveLayer(null, Paint());
 
     var areaRect = Rect.fromLTRB(0, 0, size.width, size.height);
