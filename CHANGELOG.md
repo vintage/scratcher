@@ -1,3 +1,7 @@
+## 1.2.1
+
+* Fix issue with scratch area size 
+
 ## 1.2.0
 
 * Removed revealDuration parameter - same effect can be now achieved through `reveal()` method
