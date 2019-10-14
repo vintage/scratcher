@@ -93,3 +93,7 @@ reveal | Reveals the whole scratcher, so than only original child is displayed.
 ## Example Project
 
 There is a crazy example project in the `example` folder. Check it out to see most of the available options.
+
+## Resources
+
+- [https://www.youtube.com/watch?v=EM4D1pUpadA](https://www.youtube.com/watch?v=EM4D1pUpadA) by The CS Guy
