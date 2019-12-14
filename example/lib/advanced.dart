@@ -19,15 +19,16 @@ class _AdvancedScreenState extends State<AdvancedScreen>
 
   @override
   void initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 1200))
-          ..addStatusListener(
-            (listener) {
-              if (listener == AnimationStatus.completed) {
-                _animationController.reverse();
-              }
-            },
-          );
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..addStatusListener(
+        (listener) {
+          if (listener == AnimationStatus.completed) {
+            _animationController.reverse();
+          }
+        },
+      );
     _animation = Tween(begin: 1.0, end: 1.25).animate(
       CurvedAnimation(
         parent: _animationController,

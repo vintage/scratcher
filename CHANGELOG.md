@@ -1,3 +1,9 @@
+## 1.3.0
+
+* Added `image` to support for asset, network & memory images
+* Removed `imagePath` (use `image: Image.asset(...)` instead)
+* Removed `imageFit` (configure through `image` fields instead)
+
 ## 1.2.1
 
 * Fix issue with scratch area size 

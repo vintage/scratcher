@@ -49,7 +49,9 @@ class _BasicScreenState extends State<BasicScreen> {
           child: RaisedButton(
             child: const Text('Reset'),
             onPressed: () {
-              key.currentState.reset(duration: Duration(milliseconds: 2000));
+              key.currentState.reset(
+                duration: const Duration(milliseconds: 2000),
+              );
             },
           ),
         ),
@@ -59,7 +61,9 @@ class _BasicScreenState extends State<BasicScreen> {
           child: RaisedButton(
             child: const Text('Reveal'),
             onPressed: () {
-              key.currentState.reveal(duration: Duration(milliseconds: 2000));
+              key.currentState.reveal(
+                duration: const Duration(milliseconds: 2000),
+              );
             },
           ),
         ),

@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'painter.dart';
 
@@ -43,8 +43,7 @@ class Scratcher extends StatefulWidget {
     this.brushSize = 25,
     this.accuracy = ScratchAccuracy.high,
     this.color = Colors.black,
-    this.imagePath,
-    this.imageFit = BoxFit.cover,
+    this.image,
     this.onChange,
     this.onThreshold,
   }) : super(key: key);
@@ -65,13 +64,8 @@ class Scratcher extends StatefulWidget {
   /// Color used to cover the child widget.
   final Color color;
 
-  /// Path to the local image asset which could be additionally used to cover
-  /// the child widget.
-  final String imagePath;
-
-  /// Determines how the image should be drawn in case of remaining space
-  /// (like contain or cover).
-  final BoxFit imageFit;
+  /// Image widget used to cover the child widget.
+  final Image image;
 
   /// Callback called when new part of area is revealed (min 0.1% difference).
   final Function(double value) onChange;
@@ -104,11 +98,11 @@ class ScratcherState extends State<Scratcher> {
 
   @override
   void initState() {
-    if (widget.imagePath == null) {
+    if (widget.image == null) {
       var completer = Completer<ui.Image>()..complete();
       _imageLoader = completer.future;
     } else {
-      _imageLoader = _loadImage(widget.imagePath);
+      _imageLoader = _loadImage(widget.image);
     }
 
     super.initState();
@@ -123,7 +117,9 @@ class ScratcherState extends State<Scratcher> {
           var paint = CustomPaint(
             foregroundPainter: ScratchPainter(
               image: snapshot.data,
-              imageFit: widget.imageFit,
+              imageFit: widget.image == null
+                  ? null
+                  : widget.image.fit ?? BoxFit.cover,
               points: points,
               brushSize: widget.brushSize,
               color: widget.color,
@@ -155,7 +151,7 @@ class ScratcherState extends State<Scratcher> {
                 : null,
             child: AnimatedSwitcher(
               duration: transitionDuration == null
-                  ? Duration(milliseconds: 0)
+                  ? const Duration(milliseconds: 0)
                   : transitionDuration,
               child: isFinished ? widget.child : paint,
             ),
@@ -167,11 +163,23 @@ class ScratcherState extends State<Scratcher> {
     );
   }
 
-  Future<ui.Image> _loadImage(String asset) async {
-    var data = await rootBundle.load(asset);
-    var codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
-    var fi = await codec.getNextFrame();
-    return fi.image;
+  Future<ui.Image> _loadImage(Image image) async {
+    final completer = Completer<ui.Image>();
+    dynamic imageProvider = image.image;
+    dynamic key = await imageProvider.obtainKey(const ImageConfiguration());
+
+    imageProvider.load(key, (
+      Uint8List bytes, {
+      int cacheWidth,
+      int cacheHeight,
+    }) async {
+      return await ui.instantiateImageCodec(bytes);
+    })
+      ..addListener(ImageStreamListener((ImageInfo image, _) {
+        completer.complete(image.image);
+      }));
+
+    return completer.future;
   }
 
   bool _inCircle(Offset center, Offset point, double radius) {

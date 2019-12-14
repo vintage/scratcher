@@ -2,7 +2,7 @@
 
 Scratch card widget which temporarily hides content from user.
 
-[![Version](https://img.shields.io/badge/pub-v1.2.1-blue.svg)](https://pub.dartlang.org/packages/scratcher)
+[![Version](https://img.shields.io/badge/pub-v1.3.0-blue.svg)](https://pub.dartlang.org/packages/scratcher)
 
 ![Demo](https://media.giphy.com/media/fXztsRTXoKsVuChtTl/giphy.gif)
 
@@ -18,7 +18,7 @@ Scratch card widget which temporarily hides content from user.
 1. First thing you need to do is adding the scratcher as a project dependency in `pubspec.yaml`:
 ```yaml
 dependencies:
- scratcher: "^1.2.1"
+ scratcher: "^1.3.0"
 ```
 
 2. Now you can install it by running `flutter pub get` or through code editor.
@@ -56,8 +56,7 @@ threshold | double | Percentage level of scratch area which should be revealed t
 brushSize | double | Size of the brush. The bigger it is the faster user can scratch the card.
 accuracy | ScratchAccuracy | Determines how accurate the progress should be reported. Lower accuracy means higher performance.
 color | Color | Color used to cover the child widget.
-imagePath | String | Path to the local image asset which could be additionally used to cover the child widget.
-imageFit | BoxFit | Determines how the image should be drawn in case of remaining space (like contain or cover).
+image | Image | Image widget used to cover the child widget.
 onChange | Function | Callback called when new part of area is revealed (min 0.1% difference).
 onThreshold | Function | Callback called when threshold is reached (only when defined).
 

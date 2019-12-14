@@ -24,7 +24,7 @@ class _ScratchBoxState extends State<ScratchBox> {
   Widget build(BuildContext context) {
     var icon = AnimatedOpacity(
       opacity: opacity,
-      duration: Duration(milliseconds: 750),
+      duration: const Duration(milliseconds: 750),
       child: Image.asset(
         widget.image,
         width: 70,
@@ -40,7 +40,7 @@ class _ScratchBoxState extends State<ScratchBox> {
       child: Scratcher(
         accuracy: ScratchAccuracy.low,
         color: Colors.blueGrey,
-        imagePath: 'assets/scratch.png',
+        image: Image.asset('assets/scratch.png'),
         brushSize: 15,
         threshold: 60,
         onThreshold: () {
