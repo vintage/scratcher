@@ -277,6 +277,7 @@ class ScratcherState extends State<Scratcher> {
       transitionDuration = duration;
       isFinished = false;
       canScratch = duration == null ? true : false;
+      thresholdReported = false;
 
       _lastPosition = null;
       points = [];
