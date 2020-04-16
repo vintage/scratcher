@@ -9,6 +9,7 @@ class BasicScreen extends StatefulWidget {
 
 class _BasicScreenState extends State<BasicScreen> {
   double progress = 0;
+  bool thresholdReached = false;
   final key = GlobalKey<ScratcherState>();
 
   @override
@@ -20,6 +21,7 @@ class _BasicScreenState extends State<BasicScreen> {
           brushSize: 30,
           threshold: 30,
           color: Colors.red,
+          onThreshold: () => setState(() => thresholdReached = true),
           onChange: (value) {
             setState(() {
               progress = value;
@@ -52,6 +54,7 @@ class _BasicScreenState extends State<BasicScreen> {
               key.currentState.reset(
                 duration: const Duration(milliseconds: 2000),
               );
+              setState(() => thresholdReached = false);
             },
           ),
         ),
@@ -72,6 +75,13 @@ class _BasicScreenState extends State<BasicScreen> {
           right: 10,
           child: Text(
             '${progress.round().toString()}%',
+          ),
+        ),
+        Positioned(
+          bottom: 30,
+          right: 10,
+          child: Text(
+            'Threshold reached: $thresholdReached',
           ),
         )
       ],
