@@ -37,8 +37,8 @@ Scratcher(
   brushSize: 30,
   threshold: 50,
   color: Colors.red,
-  onChange: (value) { print("Scratch progress: $value%"); },
-  onThreshold: () { print("Threshold reached, you won!"); },
+  onChange: (value) => print("Scratch progress: $value%"),
+  onThreshold: () => print("Threshold reached, you won!"),
   child: Container(
     height: 300,
     width: 300,

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'scratch_box.dart';
 
-const googleIcon = 'assets/google.png';
-const dartIcon = 'assets/dart.png';
-const flutterIcon = 'assets/flutter.png';
+const _googleIcon = 'assets/google.png';
+const _dartIcon = 'assets/dart.png';
+const _flutterIcon = 'assets/flutter.png';
 
 class AdvancedScreen extends StatefulWidget {
   @override
@@ -55,7 +55,7 @@ class _AdvancedScreenState extends State<AdvancedScreen>
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Scratcher',
                   style: TextStyle(
                     fontFamily: 'The unseen',
@@ -64,7 +64,7 @@ class _AdvancedScreenState extends State<AdvancedScreen>
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
+                const Text(
                   'scratch to win!',
                   style: TextStyle(
                     fontFamily: 'The unseen',
@@ -80,13 +80,9 @@ class _AdvancedScreenState extends State<AdvancedScreen>
                 )
               ],
             ),
-            buildRow(googleIcon, flutterIcon, googleIcon),
-            buildRow(
-              dartIcon,
-              flutterIcon,
-              googleIcon,
-            ),
-            buildRow(dartIcon, flutterIcon, dartIcon),
+            buildRow(_googleIcon, _flutterIcon, _googleIcon),
+            buildRow(_dartIcon, _flutterIcon, _googleIcon),
+            buildRow(_dartIcon, _flutterIcon, _dartIcon),
           ],
         ),
       ),

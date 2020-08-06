@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'painter.dart';
 
-const progressReportStep = 0.1;
+const _progressReportStep = 0.1;
 
 /// How accurate should the progress be tracked.
 enum ScratchAccuracy {
@@ -92,14 +92,14 @@ class ScratcherState extends State<Scratcher> {
   bool canScratch = true;
   Duration transitionDuration;
 
-  RenderBox get renderObject {
+  RenderBox get _renderObject {
     return context.findRenderObject() as RenderBox;
   }
 
   @override
   void initState() {
     if (widget.image == null) {
-      var completer = Completer<ui.Image>()..complete();
+      final completer = Completer<ui.Image>()..complete();
       _imageLoader = completer.future;
     } else {
       _imageLoader = _loadImage(widget.image);
@@ -114,7 +114,7 @@ class ScratcherState extends State<Scratcher> {
       future: _imageLoader,
       builder: (BuildContext context, AsyncSnapshot<ui.Image> snapshot) {
         if (snapshot.connectionState != ConnectionState.waiting) {
-          var paint = CustomPaint(
+          final paint = CustomPaint(
             foregroundPainter: ScratchPainter(
               image: snapshot.data,
               imageFit: widget.image == null
@@ -135,19 +135,13 @@ class ScratcherState extends State<Scratcher> {
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onPanStart: canScratch
-                ? (details) {
-                    _addPoint(details.globalPosition);
-                  }
+                ? (details) => _addPoint(details.localPosition)
                 : null,
             onPanUpdate: canScratch
-                ? (details) {
-                    _addPoint(details.globalPosition);
-                  }
+                ? (details) => _addPoint(details.localPosition)
                 : null,
             onPanEnd: canScratch
-                ? (details) => setState(() {
-                      points.add(null);
-                    })
+                ? (details) => setState(() => points.add(null))
                 : null,
             child: AnimatedSwitcher(
               duration: transitionDuration == null
@@ -183,22 +177,22 @@ class ScratcherState extends State<Scratcher> {
   }
 
   bool _inCircle(Offset center, Offset point, double radius) {
-    var dX = center.dx - point.dx;
-    var dY = center.dy - point.dy;
-    var multi = dX * dX + dY * dY;
-    var distance = sqrt(multi).roundToDouble();
+    final dX = center.dx - point.dx;
+    final dY = center.dy - point.dy;
+    final multi = dX * dX + dY * dY;
+    final distance = sqrt(multi).roundToDouble();
 
     return distance <= radius;
   }
 
-  void _addPoint(Offset globalPosition) {
+  void _addPoint(Offset position) {
     // Ignore when same point is reported multiple times in a row
-    if (_lastPosition == globalPosition) {
+    if (_lastPosition == position) {
       return;
     }
-    _lastPosition = globalPosition;
+    _lastPosition = position;
 
-    var point = renderObject.globalToLocal(globalPosition);
+    var point = position;
 
     // Ignore when starting point of new line has been already scratched
     if (points.isNotEmpty && points.contains(point)) {
@@ -216,9 +210,9 @@ class ScratcherState extends State<Scratcher> {
     if (point != null && !checked.contains(point)) {
       checked.add(point);
 
-      var reached = <Offset>{};
-      for (var checkpoint in checkpoints) {
-        var radius = widget.brushSize / 2;
+      final reached = <Offset>{};
+      for (final checkpoint in checkpoints) {
+        final radius = widget.brushSize / 2;
         if (_inCircle(checkpoint, point, radius)) {
           reached.add(checkpoint);
         }
@@ -227,7 +221,7 @@ class ScratcherState extends State<Scratcher> {
       checkpoints = checkpoints.difference(reached);
       progress =
           ((totalCheckpoints - checkpoints.length) / totalCheckpoints) * 100;
-      if (progress - progressReported >= progressReportStep) {
+      if (progress - progressReported >= _progressReportStep) {
         progressReported = progress;
         widget.onChange?.call(progress);
       }
@@ -246,21 +240,21 @@ class ScratcherState extends State<Scratcher> {
   }
 
   void _setCheckpoints(Size size) {
-    var calculated = _calculateCheckpoints(size).toSet();
+    final calculated = _calculateCheckpoints(size).toSet();
 
     checkpoints = calculated;
     totalCheckpoints = calculated.length;
   }
 
   List<Offset> _calculateCheckpoints(Size size) {
-    var accuracy = _getAccuracyValue(widget.accuracy);
-    var xOffset = size.width / accuracy;
-    var yOffset = size.height / accuracy;
+    final accuracy = _getAccuracyValue(widget.accuracy);
+    final xOffset = size.width / accuracy;
+    final yOffset = size.height / accuracy;
 
-    var points = <Offset>[];
+    final points = <Offset>[];
     for (var x = 0; x < accuracy; x++) {
       for (var y = 0; y < accuracy; y++) {
-        var point = Offset(
+        final point = Offset(
           x * xOffset,
           y * yOffset,
         );
@@ -295,7 +289,7 @@ class ScratcherState extends State<Scratcher> {
       });
     }
 
-    _setCheckpoints(renderObject.size);
+    _setCheckpoints(_renderObject.size);
     widget.onChange?.call(0);
   }
 
