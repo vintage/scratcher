@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:scratcher/utils.dart';
 
 import 'painter.dart';
 
@@ -81,7 +82,7 @@ class ScratcherState extends State<Scratcher> {
   Future<ui.Image> _imageLoader;
   Offset _lastPosition;
 
-  List<Offset> points = [];
+  List<ScratchPoint> points = [];
   Set<Offset> checkpoints;
   Set<Offset> checked = {};
   int totalCheckpoints = 0;
@@ -121,7 +122,6 @@ class ScratcherState extends State<Scratcher> {
                   ? null
                   : widget.image.fit ?? BoxFit.cover,
               points: points,
-              brushSize: widget.brushSize,
               color: widget.color,
               onDraw: (size) {
                 if (totalCheckpoints == 0) {
@@ -205,7 +205,7 @@ class ScratcherState extends State<Scratcher> {
     }
 
     setState(() {
-      points.add(point);
+      points.add(ScratchPoint(point, widget.brushSize));
     });
 
     if (point != null && !checked.contains(point)) {
