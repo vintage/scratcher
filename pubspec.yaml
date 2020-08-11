@@ -1,7 +1,6 @@
 name: scratcher
 description: Scratch card widget which temporarily hides content from user.
 homepage: https://github.com/vintage/scratcher
-author: Kamil Rykowski <kamil.rykowski@gmail.com>
 
 version: 1.4.0
 
