@@ -1,3 +1,10 @@
+## 1.4.0
+
+* Fixed image support in Flutter 1.20
+* Added support for dynamic brush size
+* Fixed threshold reporting when using reset/reveal methods
+* Updated example project
+
 ## 1.3.0
 
 * Added `image` to support for asset, network & memory images
