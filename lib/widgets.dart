@@ -68,7 +68,7 @@ class Scratcher extends StatefulWidget {
   /// Image widget used to cover the child widget.
   final Image image;
 
-  /// Callback called when new part of area is revealed (min 0.1% difference).
+  /// Callback called when new part of area is revealed (min 0.1% difference, or progress == 100).
   final Function(double value) onChange;
 
   /// Callback called when threshold is reached.
@@ -144,9 +144,7 @@ class ScratcherState extends State<Scratcher> {
                 ? (details) => setState(() => points.add(null))
                 : null,
             child: AnimatedSwitcher(
-              duration: transitionDuration == null
-                  ? const Duration(milliseconds: 0)
-                  : transitionDuration,
+              duration: transitionDuration ?? const Duration(milliseconds: 0),
               child: isFinished ? widget.child : paint,
             ),
           );
@@ -222,7 +220,8 @@ class ScratcherState extends State<Scratcher> {
       checkpoints = checkpoints.difference(reached);
       progress =
           ((totalCheckpoints - checkpoints.length) / totalCheckpoints) * 100;
-      if (progress - progressReported >= _progressReportStep) {
+      if (progress - progressReported >= _progressReportStep ||
+          progress == 100) {
         progressReported = progress;
         widget.onChange?.call(progress);
       }
@@ -271,7 +270,7 @@ class ScratcherState extends State<Scratcher> {
     setState(() {
       transitionDuration = duration;
       isFinished = false;
-      canScratch = duration == null ? true : false;
+      canScratch = duration == null;
       thresholdReported = false;
 
       _lastPosition = null;
