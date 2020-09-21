@@ -87,7 +87,7 @@ class _BasicScreenState extends State<BasicScreen> {
                   bottom: 10,
                   right: 10,
                   child: Text(
-                    '${progress.round().toString()}%',
+                    '${progress.floor().toString()}%',
                   ),
                 ),
                 Positioned(
