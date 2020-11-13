@@ -17,15 +17,17 @@ class MyApp extends StatelessWidget {
       home: DefaultTabController(
         length: 2,
         child: Scaffold(
-          bottomNavigationBar: TabBar(
-            labelColor: Colors.blueAccent,
-            unselectedLabelColor: Colors.blueGrey,
-            indicatorColor: Colors.blueAccent,
-            indicatorSize: TabBarIndicatorSize.label,
-            tabs: [
-              Tab(icon: Icon(Icons.looks_one)),
-              Tab(icon: Icon(Icons.looks_two)),
-            ],
+          bottomNavigationBar: SafeArea(
+            child: TabBar(
+              labelColor: Colors.blueAccent,
+              unselectedLabelColor: Colors.blueGrey,
+              indicatorColor: Colors.blueAccent,
+              indicatorSize: TabBarIndicatorSize.label,
+              tabs: [
+                Tab(icon: Icon(Icons.looks_one)),
+                Tab(icon: Icon(Icons.looks_two)),
+              ],
+            ),
           ),
           body: TabBarView(
             physics: const NeverScrollableScrollPhysics(),

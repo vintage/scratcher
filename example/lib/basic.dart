@@ -58,7 +58,7 @@ class _BasicScreenState extends State<BasicScreen> {
                   key: key,
                   brushSize: brushSize,
                   threshold: 30,
-                  color: Colors.red,
+                  image: Image.asset('assets/background.jpg'),
                   onThreshold: () => setState(() => thresholdReached = true),
                   onChange: (value) {
                     setState(() {
@@ -66,37 +66,53 @@ class _BasicScreenState extends State<BasicScreen> {
                     });
                   },
                   child: Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          const Text(
-                            'Scratch the screen to win',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 24, color: Colors.amber),
+                    color: Colors.black,
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Scratch the screen!',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.amber,
                           ),
-                        ],
+                        ),
+                        SizedBox(height: 8),
+                        const Text(
+                          'Photo by Fabian Wiktor from Pexels',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.amber,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 12,
+                    ),
+                    color: Colors.black,
+                    child: Text(
+                      '${progress.floor().toString()}% '
+                      '(${thresholdReached ? 'done' : 'pending'})',
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(
+                        color: Colors.white,
                       ),
                     ),
-                    color: Colors.grey,
                   ),
                 ),
-                Positioned(
-                  bottom: 10,
-                  right: 10,
-                  child: Text(
-                    '${progress.floor().toString()}%',
-                  ),
-                ),
-                Positioned(
-                  bottom: 30,
-                  right: 10,
-                  child: Text(
-                    'Threshold reached: $thresholdReached',
-                  ),
-                )
               ],
             ),
           ),

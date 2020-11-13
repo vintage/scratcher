@@ -3,8 +3,6 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:scratcher/utils.dart';
 
-typedef _DrawFunction(Size size);
-
 /// Custom painter object which handles revealing of color/image
 class ScratchPainter extends CustomPainter {
   ScratchPainter({
@@ -28,7 +26,7 @@ class ScratchPainter extends CustomPainter {
   final BoxFit imageFit;
 
   /// Callback called each time the painter is redraw
-  final _DrawFunction onDraw;
+  final void Function(Size) onDraw;
 
   Paint _getMainPaint(double strokeWidth) {
     final paint = Paint()

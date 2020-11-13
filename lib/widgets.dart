@@ -144,7 +144,7 @@ class ScratcherState extends State<Scratcher> {
                 ? (details) => setState(() => points.add(null))
                 : null,
             child: AnimatedSwitcher(
-              duration: transitionDuration ?? const Duration(milliseconds: 0),
+              duration: transitionDuration ?? Duration.zero,
               child: isFinished ? widget.child : paint,
             ),
           );
@@ -157,8 +157,8 @@ class ScratcherState extends State<Scratcher> {
 
   Future<ui.Image> _loadImage(Image image) async {
     final completer = Completer<ui.Image>();
-    dynamic imageProvider = image.image;
-    dynamic key = await imageProvider.obtainKey(const ImageConfiguration());
+    final imageProvider = image.image as dynamic;
+    final key = await imageProvider.obtainKey(const ImageConfiguration());
 
     imageProvider.load(key, (
       Uint8List bytes, {
@@ -166,11 +166,10 @@ class ScratcherState extends State<Scratcher> {
       int cacheHeight,
       bool allowUpscaling,
     }) async {
-      return await ui.instantiateImageCodec(bytes);
-    })
-      ..addListener(ImageStreamListener((ImageInfo image, _) {
-        completer.complete(image.image);
-      }));
+      return ui.instantiateImageCodec(bytes);
+    }).addListener(ImageStreamListener((ImageInfo image, _) {
+      completer.complete(image.image);
+    }));
 
     return completer.future;
   }
