@@ -1,3 +1,7 @@
+## 1.4.1
+
+* Add new callbacks to track scratching events
+
 ## 1.4.0
 
 * Fixed image support in Flutter 1.20

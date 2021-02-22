@@ -2,7 +2,7 @@
 
 Scratch card widget which temporarily hides content from user.
 
-[![Version](https://img.shields.io/badge/pub-v1.4.0-blue.svg)](https://pub.dartlang.org/packages/scratcher)
+[![Version](https://img.shields.io/badge/pub-v1.4.1-blue.svg)](https://pub.dartlang.org/packages/scratcher)
 
 ![Demo](https://media.giphy.com/media/fXztsRTXoKsVuChtTl/giphy.gif)
 
@@ -18,7 +18,7 @@ Scratch card widget which temporarily hides content from user.
 1. First thing you need to do is adding the scratcher as a project dependency in `pubspec.yaml`:
 ```yaml
 dependencies:
- scratcher: "^1.4.0"
+ scratcher: "^1.4.1"
 ```
 
 2. Now you can install it by running `flutter pub get` or through code editor.
@@ -59,6 +59,9 @@ color | Color | Color used to cover the child widget.
 image | Image | Image widget used to cover the child widget.
 onChange | Function | Callback called when new part of area is revealed (min 0.1% difference).
 onThreshold | Function | Callback called when threshold is reached (only when defined).
+onScratchStart | Function | Callback called when scratching starts.
+onScratchUpdate | Function | Callback called during scratching.
+onScratchEnd | Function | Callback called when scratching ends.
 
 ## Programmatic access
 

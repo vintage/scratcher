@@ -47,6 +47,9 @@ class Scratcher extends StatefulWidget {
     this.image,
     this.onChange,
     this.onThreshold,
+    this.onScratchStart,
+    this.onScratchUpdate,
+    this.onScratchEnd,
   }) : super(key: key);
 
   /// Widget rendered under the scratch area.
@@ -72,7 +75,16 @@ class Scratcher extends StatefulWidget {
   final Function(double value) onChange;
 
   /// Callback called when threshold is reached.
-  final Function() onThreshold;
+  final VoidCallback onThreshold;
+
+  /// Callback called when scratching starts
+  final VoidCallback onScratchStart;
+
+  /// Callback called during scratching
+  final VoidCallback onScratchUpdate;
+
+  /// Callback called when scratching ends
+  final VoidCallback onScratchEnd;
 
   @override
   ScratcherState createState() => ScratcherState();
@@ -135,13 +147,22 @@ class ScratcherState extends State<Scratcher> {
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onPanStart: canScratch
-                ? (details) => _addPoint(details.localPosition)
+                ? (details) {
+                    widget.onScratchStart?.call();
+                    _addPoint(details.localPosition);
+                  }
                 : null,
             onPanUpdate: canScratch
-                ? (details) => _addPoint(details.localPosition)
+                ? (details) {
+                    widget.onScratchUpdate?.call();
+                    _addPoint(details.localPosition);
+                  }
                 : null,
             onPanEnd: canScratch
-                ? (details) => setState(() => points.add(null))
+                ? (details) {
+                    widget.onScratchEnd?.call();
+                    setState(() => points.add(null));
+                  }
                 : null,
             child: AnimatedSwitcher(
               duration: transitionDuration ?? Duration.zero,

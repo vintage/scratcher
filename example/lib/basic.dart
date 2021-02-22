@@ -65,6 +65,15 @@ class _BasicScreenState extends State<BasicScreen> {
                       progress = value;
                     });
                   },
+                  onScratchStart: () {
+                    print("Scratching has started");
+                  },
+                  onScratchUpdate: () {
+                    print("Scratching in progress");
+                  },
+                  onScratchEnd: () {
+                    print("Scratching has finished");
+                  },
                   child: Container(
                     color: Colors.black,
                     alignment: Alignment.center,
