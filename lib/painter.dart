@@ -63,7 +63,10 @@ class ScratchPainter extends CustomPainter {
 
     for (final point in points) {
       if (point == null) {
-        canvas.drawPath(path, _getMainPaint(previousPoint.size));
+        if (previousPoint != null) {
+          canvas.drawPath(path, _getMainPaint(previousPoint.size));
+        }
+
         path = Path();
         isStarted = false;
       } else {
