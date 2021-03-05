@@ -1,3 +1,7 @@
+## 1.4.2
+
+* Fix painting error
+
 ## 1.4.1
 
 * Add new callbacks to track scratching events
