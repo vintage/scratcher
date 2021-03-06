@@ -1,3 +1,7 @@
+## 1.5.0
+
+* Support WEB platform
+
 ## 1.4.2
 
 * Fix painting error
