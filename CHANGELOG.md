@@ -1,3 +1,7 @@
+## 1.6.0
+
+* Added `enabled` parameter to control whether new scratches can be applied
+
 ## 1.5.0
 
 * Support WEB platform

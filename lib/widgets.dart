@@ -40,6 +40,7 @@ class Scratcher extends StatefulWidget {
   Scratcher({
     Key key,
     @required this.child,
+    this.enabled = true,
     this.threshold,
     this.brushSize = 25,
     this.accuracy = ScratchAccuracy.high,
@@ -54,6 +55,9 @@ class Scratcher extends StatefulWidget {
 
   /// Widget rendered under the scratch area.
   final Widget child;
+
+  /// Whether new scratches can be applied
+  final bool enabled;
 
   /// Percentage level of scratch area which should be revealed to complete.
   final double threshold;
@@ -149,19 +153,25 @@ class ScratcherState extends State<Scratcher> {
             onPanStart: canScratch
                 ? (details) {
                     widget.onScratchStart?.call();
-                    _addPoint(details.localPosition);
+                    if (widget.enabled) {
+                      _addPoint(details.localPosition);
+                    }
                   }
                 : null,
             onPanUpdate: canScratch
                 ? (details) {
                     widget.onScratchUpdate?.call();
-                    _addPoint(details.localPosition);
+                    if (widget.enabled) {
+                      _addPoint(details.localPosition);
+                    }
                   }
                 : null,
             onPanEnd: canScratch
                 ? (details) {
                     widget.onScratchEnd?.call();
-                    setState(() => points.add(null));
+                    if (widget.enabled) {
+                      setState(() => points.add(null));
+                    }
                   }
                 : null,
             child: AnimatedSwitcher(

@@ -2,7 +2,7 @@
 
 Scratch card widget which temporarily hides content from user.
 
-[![Version](https://img.shields.io/badge/pub-v1.5.0-blue.svg)](https://pub.dartlang.org/packages/scratcher)
+[![Version](https://img.shields.io/badge/pub-v1.6.0-blue.svg)](https://pub.dartlang.org/packages/scratcher)
 
 ![Demo](https://media.giphy.com/media/fXztsRTXoKsVuChtTl/giphy.gif)
 
@@ -18,7 +18,7 @@ Scratch card widget which temporarily hides content from user.
 1. First thing you need to do is adding the scratcher as a project dependency in `pubspec.yaml`:
 ```yaml
 dependencies:
- scratcher: "^1.5.0"
+ scratcher: "^1.6.0"
 ```
 
 2. Now you can install it by running `flutter pub get` or through code editor.
@@ -52,6 +52,7 @@ Scratcher(
 Property | Type | Description
 --- | --- | ---
 child | Widget | Widget rendered under the scratch area.
+enabled | bool | Whether new scratches can be applied.
 threshold | double | Percentage level of scratch area which should be revealed to complete.
 brushSize | double | Size of the brush. The bigger it is the faster user can scratch the card.
 accuracy | ScratchAccuracy | Determines how accurate the progress should be reported. Lower accuracy means higher performance.

@@ -2,7 +2,7 @@ name: scratcher
 description: Scratch card widget which temporarily hides content from user.
 homepage: https://github.com/vintage/scratcher
 
-version: 1.5.0
+version: 1.6.0
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

@@ -11,6 +11,7 @@ class _BasicScreenState extends State<BasicScreen> {
   double brushSize = 30;
   double progress = 0;
   bool thresholdReached = false;
+  bool enabled = true;
   final key = GlobalKey<ScratcherState>();
 
   @override
@@ -51,11 +52,19 @@ class _BasicScreenState extends State<BasicScreen> {
               ),
             ],
           ),
+          CheckboxListTile(
+            value: enabled,
+            title: Text('Scratcher enabled'),
+            onChanged: (e) => setState(() {
+              enabled = e;
+            }),
+          ),
           Expanded(
             child: Stack(
               children: [
                 Scratcher(
                   key: key,
+                  enabled: enabled,
                   brushSize: brushSize,
                   threshold: 30,
                   image: Image.asset('assets/background.jpg'),
