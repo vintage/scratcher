@@ -2,7 +2,7 @@
 
 Scratch card widget which temporarily hides content from user.
 
-[![Version](https://img.shields.io/badge/pub-v1.6.0-blue.svg)](https://pub.dartlang.org/packages/scratcher)
+[![Version](https://img.shields.io/badge/pub-v2.0.0-blue.svg)](https://pub.dartlang.org/packages/scratcher)
 
 ![Demo](https://media.giphy.com/media/fXztsRTXoKsVuChtTl/giphy.gif)
 
@@ -18,7 +18,7 @@ Scratch card widget which temporarily hides content from user.
 1. First thing you need to do is adding the scratcher as a project dependency in `pubspec.yaml`:
 ```yaml
 dependencies:
- scratcher: "^1.6.0"
+ scratcher: "^2.0.0"
 ```
 
 2. Now you can install it by running `flutter pub get` or through code editor.

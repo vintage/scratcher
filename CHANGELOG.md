@@ -1,3 +1,7 @@
+## 2.0.0
+
+* Migrate package to null safety
+
 ## 1.6.0
 
 * Added `enabled` parameter to control whether new scratches can be applied

@@ -38,8 +38,8 @@ double _getAccuracyValue(ScratchAccuracy accuracy) {
 /// Scratcher widget which covers given child with scratchable overlay.
 class Scratcher extends StatefulWidget {
   Scratcher({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.enabled = true,
     this.threshold,
     this.brushSize = 25,
@@ -60,7 +60,7 @@ class Scratcher extends StatefulWidget {
   final bool enabled;
 
   /// Percentage level of scratch area which should be revealed to complete.
-  final double threshold;
+  final double? threshold;
 
   /// Size of the brush. The bigger it is the faster user can scratch the card.
   final double brushSize;
@@ -73,33 +73,33 @@ class Scratcher extends StatefulWidget {
   final Color color;
 
   /// Image widget used to cover the child widget.
-  final Image image;
+  final Image? image;
 
   /// Callback called when new part of area is revealed (min 0.1% difference, or progress == 100).
-  final Function(double value) onChange;
+  final Function(double value)? onChange;
 
   /// Callback called when threshold is reached.
-  final VoidCallback onThreshold;
+  final VoidCallback? onThreshold;
 
   /// Callback called when scratching starts
-  final VoidCallback onScratchStart;
+  final VoidCallback? onScratchStart;
 
   /// Callback called during scratching
-  final VoidCallback onScratchUpdate;
+  final VoidCallback? onScratchUpdate;
 
   /// Callback called when scratching ends
-  final VoidCallback onScratchEnd;
+  final VoidCallback? onScratchEnd;
 
   @override
   ScratcherState createState() => ScratcherState();
 }
 
 class ScratcherState extends State<Scratcher> {
-  Future<ui.Image> _imageLoader;
-  Offset _lastPosition;
+  late Future<ui.Image> _imageLoader;
+  Offset? _lastPosition;
 
-  List<ScratchPoint> points = [];
-  Set<Offset> checkpoints;
+  List<ScratchPoint?> points = [];
+  late Set<Offset> checkpoints;
   Set<Offset> checked = {};
   int totalCheckpoints = 0;
   double progress = 0;
@@ -107,10 +107,10 @@ class ScratcherState extends State<Scratcher> {
   bool thresholdReported = false;
   bool isFinished = false;
   bool canScratch = true;
-  Duration transitionDuration;
+  Duration? transitionDuration;
 
-  RenderBox get _renderObject {
-    return context.findRenderObject() as RenderBox;
+  RenderBox? get _renderObject {
+    return context.findRenderObject() as RenderBox?;
   }
 
   @override
@@ -119,7 +119,7 @@ class ScratcherState extends State<Scratcher> {
       final completer = Completer<ui.Image>()..complete();
       _imageLoader = completer.future;
     } else {
-      _imageLoader = _loadImage(widget.image);
+      _imageLoader = _loadImage(widget.image!);
     }
 
     super.initState();
@@ -136,7 +136,7 @@ class ScratcherState extends State<Scratcher> {
               image: snapshot.data,
               imageFit: widget.image == null
                   ? null
-                  : widget.image.fit ?? BoxFit.cover,
+                  : widget.image!.fit ?? BoxFit.cover,
               points: points,
               color: widget.color,
               onDraw: (size) {
@@ -193,9 +193,9 @@ class ScratcherState extends State<Scratcher> {
 
     imageProvider.load(key, (
       Uint8List bytes, {
-      int cacheWidth,
-      int cacheHeight,
-      bool allowUpscaling,
+      int? cacheWidth,
+      int? cacheHeight,
+      bool? allowUpscaling,
     }) async {
       return ui.instantiateImageCodec(bytes);
     }).addListener(ImageStreamListener((ImageInfo image, _) {
@@ -221,7 +221,7 @@ class ScratcherState extends State<Scratcher> {
     }
     _lastPosition = position;
 
-    var point = position;
+    ui.Offset? point = position;
 
     // Ignore when starting point of new line has been already scratched
     if (points.isNotEmpty && points.contains(point)) {
@@ -258,7 +258,7 @@ class ScratcherState extends State<Scratcher> {
 
       if (!thresholdReported &&
           widget.threshold != null &&
-          progress >= widget.threshold) {
+          progress >= widget.threshold!) {
         thresholdReported = true;
         widget.onThreshold?.call();
       }
@@ -296,7 +296,7 @@ class ScratcherState extends State<Scratcher> {
   }
 
   /// Resets the scratcher state to the initial values.
-  void reset({Duration duration}) {
+  void reset({Duration? duration}) {
     setState(() {
       transitionDuration = duration;
       isFinished = false;
@@ -319,12 +319,12 @@ class ScratcherState extends State<Scratcher> {
       });
     }
 
-    _setCheckpoints(_renderObject.size);
+    _setCheckpoints(_renderObject!.size);
     widget.onChange?.call(0);
   }
 
   /// Reveals the whole scratcher, so than only original child is displayed.
-  void reveal({Duration duration}) {
+  void reveal({Duration? duration}) {
     setState(() {
       transitionDuration = duration;
       isFinished = true;

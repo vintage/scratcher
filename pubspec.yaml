@@ -2,10 +2,10 @@ name: scratcher
 description: Scratch card widget which temporarily hides content from user.
 homepage: https://github.com/vintage/scratcher
 
-version: 1.6.0
+version: 2.0.0
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=2.0.0"
 
 dependencies:
