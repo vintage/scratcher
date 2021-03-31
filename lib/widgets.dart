@@ -31,8 +31,6 @@ double _getAccuracyValue(ScratchAccuracy accuracy) {
     case ScratchAccuracy.high:
       return 100.0;
   }
-
-  return 0;
 }
 
 /// Scratcher widget which covers given child with scratchable overlay.
@@ -95,7 +93,7 @@ class Scratcher extends StatefulWidget {
 }
 
 class ScratcherState extends State<Scratcher> {
-  late Future<ui.Image> _imageLoader;
+  late Future<ui.Image?> _imageLoader;
   Offset? _lastPosition;
 
   List<ScratchPoint?> points = [];
@@ -127,9 +125,9 @@ class ScratcherState extends State<Scratcher> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ui.Image>(
+    return FutureBuilder<ui.Image?>(
       future: _imageLoader,
-      builder: (BuildContext context, AsyncSnapshot<ui.Image> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<ui.Image?> snapshot) {
         if (snapshot.connectionState != ConnectionState.waiting) {
           final paint = CustomPaint(
             foregroundPainter: ScratchPainter(

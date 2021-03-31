@@ -1,3 +1,7 @@
+## 2.0.1
+
+* Fix nullable image
+
 ## 2.0.0
 
 * Migrate package to null safety
