@@ -1,3 +1,8 @@
+## 2.1.0
+
+* Rebuild scratcher on constraints resize through `rebuildOnResize` parameter
+* Fix null-related crash (by @pcvdheuvel)
+
 ## 2.0.1
 
 * Fix nullable image
