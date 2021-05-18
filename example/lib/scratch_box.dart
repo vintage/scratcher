@@ -3,14 +3,14 @@ import 'package:scratcher/scratcher.dart';
 
 class ScratchBox extends StatefulWidget {
   ScratchBox({
-    this.image,
+    required this.image,
     this.onScratch,
     this.animation,
   });
 
   final String image;
-  final VoidCallback onScratch;
-  final Animation<double> animation;
+  final VoidCallback? onScratch;
+  final Animation<double>? animation;
 
   @override
   _ScratchBoxState createState() => _ScratchBoxState();
@@ -54,7 +54,7 @@ class _ScratchBoxState extends State<ScratchBox> {
           child: widget.animation == null
               ? icon
               : ScaleTransition(
-                  scale: widget.animation,
+                  scale: widget.animation!,
                   child: icon,
                 ),
         ),

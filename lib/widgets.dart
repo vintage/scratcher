@@ -44,6 +44,7 @@ class Scratcher extends StatefulWidget {
     this.accuracy = ScratchAccuracy.high,
     this.color = Colors.black,
     this.image,
+    this.rebuildOnResize = true,
     this.onChange,
     this.onThreshold,
     this.onScratchStart,
@@ -72,6 +73,9 @@ class Scratcher extends StatefulWidget {
 
   /// Image widget used to cover the child widget.
   final Image? image;
+
+  /// Determines if the scratcher should rebuild itself when space constraints change (resize).
+  final bool rebuildOnResize;
 
   /// Callback called when new part of area is revealed (min 0.1% difference, or progress == 100).
   final Function(double value)? onChange;
@@ -106,6 +110,7 @@ class ScratcherState extends State<Scratcher> {
   bool isFinished = false;
   bool canScratch = true;
   Duration? transitionDuration;
+  Size? _lastKnownSize;
 
   RenderBox? get _renderObject {
     return context.findRenderObject() as RenderBox?;
@@ -129,23 +134,6 @@ class ScratcherState extends State<Scratcher> {
       future: _imageLoader,
       builder: (BuildContext context, AsyncSnapshot<ui.Image?> snapshot) {
         if (snapshot.connectionState != ConnectionState.waiting) {
-          final paint = CustomPaint(
-            foregroundPainter: ScratchPainter(
-              image: snapshot.data,
-              imageFit: widget.image == null
-                  ? null
-                  : widget.image!.fit ?? BoxFit.cover,
-              points: points,
-              color: widget.color,
-              onDraw: (size) {
-                if (totalCheckpoints == 0) {
-                  _setCheckpoints(size);
-                }
-              },
-            ),
-            child: widget.child,
-          );
-
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onPanStart: canScratch
@@ -174,7 +162,31 @@ class ScratcherState extends State<Scratcher> {
                 : null,
             child: AnimatedSwitcher(
               duration: transitionDuration ?? Duration.zero,
-              child: isFinished ? widget.child : paint,
+              child: isFinished
+                  ? widget.child
+                  : CustomPaint(
+                      foregroundPainter: ScratchPainter(
+                        image: snapshot.data,
+                        imageFit: widget.image == null
+                            ? null
+                            : widget.image!.fit ?? BoxFit.cover,
+                        points: points,
+                        color: widget.color,
+                        onDraw: (size) {
+                          if (_lastKnownSize == null) {
+                            _setCheckpoints(size);
+                          } else if (_lastKnownSize != size &&
+                              widget.rebuildOnResize) {
+                            WidgetsBinding.instance?.addPostFrameCallback((_) {
+                              reset();
+                            });
+                          }
+
+                          _lastKnownSize = size;
+                        },
+                      ),
+                      child: widget.child,
+                    ),
             ),
           );
         }

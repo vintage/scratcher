@@ -14,8 +14,8 @@ class AdvancedScreen extends StatefulWidget {
 class _AdvancedScreenState extends State<AdvancedScreen>
     with SingleTickerProviderStateMixin {
   double validScratches = 0;
-  AnimationController _animationController;
-  Animation<double> _animation;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
 
   @override
   void initState() {

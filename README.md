@@ -58,6 +58,7 @@ brushSize | double | Size of the brush. The bigger it is the faster user can scr
 accuracy | ScratchAccuracy | Determines how accurate the progress should be reported. Lower accuracy means higher performance.
 color | Color | Color used to cover the child widget.
 image | Image | Image widget used to cover the child widget.
+rebuildOnResize | bool | Determines if the scratcher should rebuild itself when space constraints change (resize).
 onChange | Function | Callback called when new part of area is revealed (min 0.1% difference).
 onThreshold | Function | Callback called when threshold is reached (only when defined).
 onScratchStart | Function | Callback called when scratching starts.

@@ -12,6 +12,7 @@ class _BasicScreenState extends State<BasicScreen> {
   double progress = 0;
   bool thresholdReached = false;
   bool enabled = true;
+  double? size;
   final key = GlobalKey<ScratcherState>();
 
   @override
@@ -25,30 +26,44 @@ class _BasicScreenState extends State<BasicScreen> {
               RaisedButton(
                 child: const Text('Reset'),
                 onPressed: () {
-                  key.currentState.reset(
+                  key.currentState?.reset(
                     duration: const Duration(milliseconds: 2000),
                   );
                   setState(() => thresholdReached = false);
                 },
               ),
-              Column(
-                children: [
-                  Text('Brush size (${brushSize.round()})'),
-                  Slider(
-                    value: brushSize,
-                    onChanged: (v) => setState(() => brushSize = v),
-                    min: 5,
-                    max: 100,
-                  ),
-                ],
+              RaisedButton(
+                child: const Text('Change size'),
+                onPressed: () {
+                  setState(() {
+                    if (size == null) {
+                      size = 200;
+                    } else if (size == 200) {
+                      size = 0;
+                    } else {
+                      size = null;
+                    }
+                  });
+                },
               ),
               RaisedButton(
                 child: const Text('Reveal'),
                 onPressed: () {
-                  key.currentState.reveal(
+                  key.currentState?.reveal(
                     duration: const Duration(milliseconds: 2000),
                   );
                 },
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Text('Brush size (${brushSize.round()})'),
+              Slider(
+                value: brushSize,
+                onChanged: (v) => setState(() => brushSize = v),
+                min: 5,
+                max: 100,
               ),
             ],
           ),
@@ -56,59 +71,63 @@ class _BasicScreenState extends State<BasicScreen> {
             value: enabled,
             title: Text('Scratcher enabled'),
             onChanged: (e) => setState(() {
-              enabled = e;
+              enabled = e ?? false;
             }),
           ),
           Expanded(
             child: Stack(
               children: [
-                Scratcher(
-                  key: key,
-                  enabled: enabled,
-                  brushSize: brushSize,
-                  threshold: 30,
-                  image: Image.asset('assets/background.jpg'),
-                  onThreshold: () => setState(() => thresholdReached = true),
-                  onChange: (value) {
-                    setState(() {
-                      progress = value;
-                    });
-                  },
-                  onScratchStart: () {
-                    print("Scratching has started");
-                  },
-                  onScratchUpdate: () {
-                    print("Scratching in progress");
-                  },
-                  onScratchEnd: () {
-                    print("Scratching has finished");
-                  },
-                  child: Container(
-                    color: Colors.black,
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Scratch the screen!',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.amber,
+                SizedBox(
+                  height: size,
+                  width: size,
+                  child: Scratcher(
+                    key: key,
+                    enabled: enabled,
+                    brushSize: brushSize,
+                    threshold: 30,
+                    image: Image.asset('assets/background.jpg'),
+                    onThreshold: () => setState(() => thresholdReached = true),
+                    onChange: (value) {
+                      setState(() {
+                        progress = value;
+                      });
+                    },
+                    onScratchStart: () {
+                      print("Scratching has started");
+                    },
+                    onScratchUpdate: () {
+                      print("Scratching in progress");
+                    },
+                    onScratchEnd: () {
+                      print("Scratching has finished");
+                    },
+                    child: Container(
+                      color: Colors.black,
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Scratch the screen!',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.amber,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 8),
-                        const Text(
-                          'Photo by Fabian Wiktor from Pexels',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.amber,
-                          ),
-                        )
-                      ],
+                          SizedBox(height: 8),
+                          const Text(
+                            'Photo by Fabian Wiktor from Pexels',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.amber,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
