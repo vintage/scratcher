@@ -1,3 +1,8 @@
+## 2.2.0
+
+* Update dependencies
+* Improve performance (by @tcd93)
+
 ## 2.1.0
 
 * Rebuild scratcher on constraints resize through `rebuildOnResize` parameter
