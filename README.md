@@ -1,6 +1,6 @@
 # scratcher
 
-Scratch card widget which temporarily hides content from user.
+Scratch card widget which temporarily hides content from the user.
 
 [![Version](https://img.shields.io/badge/pub-v2.1.0-blue.svg)](https://pub.dartlang.org/packages/scratcher)
 
@@ -8,7 +8,10 @@ Scratch card widget which temporarily hides content from user.
 
 ## Features
 
-- Android and iOS support
+- Supported platforms:
+  - Android
+  - iOS
+  - Web (CanvasKit only)
 - Cover content with full color or custom image 
 - Track the scratch progress and threshold
 - Fully configurable
