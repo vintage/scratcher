@@ -1,3 +1,6 @@
+## 2.2.1
+* Fix null-aware operation of addPostFrameCallback
+
 ## 2.2.0
 
 * Update dependencies
