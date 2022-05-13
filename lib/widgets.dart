@@ -177,7 +177,7 @@ class ScratcherState extends State<Scratcher> {
                             _setCheckpoints(size);
                           } else if (_lastKnownSize != size &&
                               widget.rebuildOnResize) {
-                            WidgetsBinding.instance?.addPostFrameCallback((_) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
                               reset();
                             });
                           }
