@@ -34,6 +34,7 @@ class ScratchPainter extends CustomPainter {
       ..color = Colors.transparent
       ..strokeWidth = strokeWidth
       ..blendMode = BlendMode.src
+      ..strokeJoin = StrokeJoin.round
       ..style = PaintingStyle.stroke;
 
     return paint;
