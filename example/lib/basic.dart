@@ -23,7 +23,7 @@ class _BasicScreenState extends State<BasicScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              RaisedButton(
+              ElevatedButton(
                 child: const Text('Reset'),
                 onPressed: () {
                   key.currentState?.reset(
@@ -32,7 +32,7 @@ class _BasicScreenState extends State<BasicScreen> {
                   setState(() => thresholdReached = false);
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: const Text('Change size'),
                 onPressed: () {
                   setState(() {
@@ -46,7 +46,7 @@ class _BasicScreenState extends State<BasicScreen> {
                   });
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: const Text('Reveal'),
                 onPressed: () {
                   key.currentState?.reveal(
