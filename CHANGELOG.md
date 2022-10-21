@@ -1,3 +1,7 @@
+## 2.3.0
+* Fix spiky drawings (by @maliksenpai)
+* Upgrade to Flutter 3.x
+
 ## 2.2.1
 * Fix null-aware operation of addPostFrameCallback
 
