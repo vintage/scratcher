@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:scratcher/painter.dart';
 import 'package:scratcher/utils.dart';
-
-import 'painter.dart';
 
 const _progressReportStep = 0.1;
 
@@ -41,6 +40,7 @@ class Scratcher extends StatefulWidget {
     this.enabled = true,
     this.threshold,
     this.brushSize = 25,
+    this.placeholderAsset,
     this.accuracy = ScratchAccuracy.high,
     this.color = Colors.black,
     this.image,
@@ -60,6 +60,8 @@ class Scratcher extends StatefulWidget {
 
   /// Percentage level of scratch area which should be revealed to complete.
   final double? threshold;
+
+  final String? placeholderAsset;
 
   /// Size of the brush. The bigger it is the faster user can scratch the card.
   final double brushSize;
@@ -131,69 +133,87 @@ class ScratcherState extends State<Scratcher> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<ui.Image?>(
-      future: _imageLoader,
-      builder: (BuildContext context, AsyncSnapshot<ui.Image?> snapshot) {
-        if (snapshot.connectionState != ConnectionState.waiting) {
-          return GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onPanStart: canScratch
-                ? (details) {
-                    widget.onScratchStart?.call();
-                    if (widget.enabled) {
-                      _addPoint(details.localPosition);
+      builder: (context, placeholderSnapshot) {
+        return FutureBuilder<ui.Image?>(
+          future: _imageLoader,
+          builder: (BuildContext context, AsyncSnapshot<ui.Image?> snapshot) {
+            if (snapshot.hasError) {
+              return widget.image?.errorBuilder?.call(
+                      context, 'Snapshot has errors', StackTrace.empty) ??
+                  Container();
+            }
+            return GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onPanStart: canScratch
+                  ? (details) {
+                      widget.onScratchStart?.call();
+                      if (widget.enabled) {
+                        _addPoint(details.localPosition);
+                      }
                     }
-                  }
-                : null,
-            onPanUpdate: canScratch
-                ? (details) {
-                    widget.onScratchUpdate?.call();
-                    if (widget.enabled) {
-                      _addPoint(details.localPosition);
+                  : null,
+              onPanUpdate: canScratch
+                  ? (details) {
+                      widget.onScratchUpdate?.call();
+                      if (widget.enabled) {
+                        _addPoint(details.localPosition);
+                      }
                     }
-                  }
-                : null,
-            onPanEnd: canScratch
-                ? (details) {
-                    widget.onScratchEnd?.call();
-                    if (widget.enabled) {
-                      setState(() => points.add(null));
+                  : null,
+              onPanEnd: canScratch
+                  ? (details) {
+                      widget.onScratchEnd?.call();
+                      if (widget.enabled) {
+                        setState(() => points.add(null));
+                      }
                     }
-                  }
-                : null,
-            child: AnimatedSwitcher(
-              duration: transitionDuration ?? Duration.zero,
-              child: isFinished
-                  ? widget.child
-                  : CustomPaint(
-                      foregroundPainter: ScratchPainter(
-                        image: snapshot.data,
-                        imageFit: widget.image == null
-                            ? null
-                            : widget.image!.fit ?? BoxFit.cover,
-                        points: points,
-                        color: widget.color,
-                        onDraw: (size) {
-                          if (_lastKnownSize == null) {
-                            _setCheckpoints(size);
-                          } else if (_lastKnownSize != size &&
-                              widget.rebuildOnResize) {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              reset();
-                            });
-                          }
+                  : null,
+              child: AnimatedSwitcher(
+                duration: transitionDuration ?? Duration.zero,
+                child: isFinished
+                    ? widget.child
+                    : CustomPaint(
+                        foregroundPainter: ScratchPainter(
+                          image: getImageData(snapshot, placeholderSnapshot),
+                          imageFit: widget.image == null
+                              ? null
+                              : widget.image!.fit ?? BoxFit.cover,
+                          points: points,
+                          color: widget.color,
+                          onDraw: (size) {
+                            if (_lastKnownSize == null) {
+                              _setCheckpoints(size);
+                            } else if (_lastKnownSize != size &&
+                                widget.rebuildOnResize) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                reset();
+                              });
+                            }
 
-                          _lastKnownSize = size;
-                        },
+                            _lastKnownSize = size;
+                          },
+                        ),
+                        child: widget.child,
                       ),
-                      child: widget.child,
-                    ),
-            ),
-          );
-        }
-
-        return Container();
+              ),
+            );
+          },
+        );
       },
+      future: widget.placeholderAsset != null
+          ? _loadPlaceholderImage(
+              widget.placeholderAsset!,
+            )
+          : null,
     );
+  }
+
+  Future<ui.Image> _loadPlaceholderImage(String assetPath) async {
+    final data = await rootBundle.load(assetPath);
+    final list = Uint8List.view(data.buffer);
+    final completer = Completer<ui.Image>();
+    ui.decodeImageFromList(list, completer.complete);
+    return completer.future;
   }
 
   Future<ui.Image> _loadImage(Image image) async {
@@ -342,5 +362,20 @@ class ScratcherState extends State<Scratcher> {
     });
 
     widget.onChange?.call(100);
+  }
+
+  ui.Image? getImageData(
+    AsyncSnapshot<ui.Image?> snapshot,
+    AsyncSnapshot<ui.Image?> placeholderSnapshot,
+  ) {
+    switch (snapshot.connectionState) {
+      case ConnectionState.none:
+      case ConnectionState.waiting:
+        return placeholderSnapshot.data;
+      case ConnectionState.done:
+        return snapshot.data;
+      default:
+        return null;
+    }
   }
 }
