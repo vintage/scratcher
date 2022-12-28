@@ -121,7 +121,7 @@ class ScratcherState extends State<Scratcher> {
   @override
   void initState() {
     if (widget.image == null) {
-      final completer = Completer<ui.Image?>()..complete();
+      final completer = Completer<ui.Image?>();
       _imageLoader = completer.future;
     } else {
       _imageLoader = _loadImage(widget.image!);
