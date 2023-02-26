@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:scratcher/controller.dart';
 import 'package:scratcher/scratcher.dart';
 
 class BasicScreen extends StatefulWidget {
@@ -14,6 +14,7 @@ class _BasicScreenState extends State<BasicScreen> {
   bool enabled = true;
   double? size;
   final key = GlobalKey<ScratcherState>();
+  final controller = new ScratcherController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +27,8 @@ class _BasicScreenState extends State<BasicScreen> {
               ElevatedButton(
                 child: const Text('Reset'),
                 onPressed: () {
-                  key.currentState?.reset(
-                    duration: const Duration(milliseconds: 2000),
-                  );
+                  controller.clearPoints(
+                      duration: Duration(milliseconds: 2000));
                   setState(() => thresholdReached = false);
                 },
               ),
@@ -49,7 +49,7 @@ class _BasicScreenState extends State<BasicScreen> {
               ElevatedButton(
                 child: const Text('Reveal'),
                 onPressed: () {
-                  key.currentState?.reveal(
+                  controller.reveal(
                     duration: const Duration(milliseconds: 2000),
                   );
                 },
@@ -82,6 +82,7 @@ class _BasicScreenState extends State<BasicScreen> {
                   width: size,
                   child: Scratcher(
                     key: key,
+                    controller: controller,
                     enabled: enabled,
                     brushSize: brushSize,
                     threshold: 30,
