@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:scratcher/controller.dart';
 import 'package:scratcher/utils.dart';
 
 import 'painter.dart';
@@ -38,6 +39,7 @@ class Scratcher extends StatefulWidget {
   Scratcher({
     Key? key,
     required this.child,
+    this.controller,
     this.enabled = true,
     this.threshold,
     this.brushSize = 25,
@@ -92,6 +94,8 @@ class Scratcher extends StatefulWidget {
   /// Callback called when scratching ends
   final VoidCallback? onScratchEnd;
 
+  final ScratcherController? controller;
+
   @override
   ScratcherState createState() => ScratcherState();
 }
@@ -124,7 +128,16 @@ class ScratcherState extends State<Scratcher> {
     } else {
       _imageLoader = _loadImage(widget.image!);
     }
-
+    if (widget.controller != null) {
+      widget.controller?.addListener(() {
+        if (widget.controller!.revealed == true) {
+          reveal(duration: widget.controller?.duration);
+        } else if (widget.controller!.revealed == false) {
+          reset(duration: widget.controller?.duration);
+        }
+        points = widget.controller!.points;
+      });
+    }
     super.initState();
   }
 
@@ -140,7 +153,8 @@ class ScratcherState extends State<Scratcher> {
                 ? (details) {
                     widget.onScratchStart?.call();
                     if (widget.enabled) {
-                      _addPoint(details.localPosition);
+                      final newPoints = _addPoint(details.localPosition);
+                      widget.controller?.points = newPoints!;
                     }
                   }
                 : null,
@@ -148,7 +162,8 @@ class ScratcherState extends State<Scratcher> {
                 ? (details) {
                     widget.onScratchUpdate?.call();
                     if (widget.enabled) {
-                      _addPoint(details.localPosition);
+                      final newPoints = _addPoint(details.localPosition);
+                      widget.controller?.points = newPoints!;
                     }
                   }
                 : null,
@@ -224,10 +239,10 @@ class ScratcherState extends State<Scratcher> {
     return distance <= radius;
   }
 
-  void _addPoint(Offset position) {
+  List<ScratchPoint?>? _addPoint(Offset position) {
     // Ignore when same point is reported multiple times in a row
     if (_lastPosition == position) {
-      return;
+      return null;
     }
     _lastPosition = position;
 
@@ -236,7 +251,7 @@ class ScratcherState extends State<Scratcher> {
     // Ignore when starting point of new line has been already scratched
     if (points.isNotEmpty && points.contains(point)) {
       if (points.last == null) {
-        return;
+        return null;
       } else {
         point = null;
       }
@@ -273,6 +288,7 @@ class ScratcherState extends State<Scratcher> {
         isFinished = true;
       }
     }
+    return points;
   }
 
   void _setCheckpoints(Size size) {
