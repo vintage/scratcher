@@ -4,9 +4,8 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:scratcher/painter.dart';
 import 'package:scratcher/utils.dart';
-
-import 'painter.dart';
 
 const _progressReportStep = 0.1;
 
@@ -199,7 +198,7 @@ class ScratcherState extends State<Scratcher> {
   Future<ui.Image> _loadImage(Image image) async {
     final completer = Completer<ui.Image>();
     final imageProvider = image.image as dynamic;
-    final key = await imageProvider.obtainKey(const ImageConfiguration());
+    final key = await imageProvider.obtainKey(ImageConfiguration.empty);
 
     imageProvider.load(key, (
       Uint8List bytes, {
@@ -232,9 +231,10 @@ class ScratcherState extends State<Scratcher> {
     _lastPosition = position;
 
     ui.Offset? point = position;
+    final scratchPoint = ScratchPoint(point, widget.brushSize);
 
     // Ignore when starting point of new line has been already scratched
-    if (points.isNotEmpty && points.contains(point)) {
+    if (points.isNotEmpty && points.contains(scratchPoint)) {
       if (points.last == null) {
         return;
       } else {
@@ -243,7 +243,7 @@ class ScratcherState extends State<Scratcher> {
     }
 
     setState(() {
-      points.add(ScratchPoint(point, widget.brushSize));
+      points.add(scratchPoint);
     });
 
     if (point != null && !checked.contains(point)) {
