@@ -1,3 +1,6 @@
+## 2.4.0
+* Make scratcher work on iOS with Flutter 3.13+ (by @xrusu)
+
 ## 2.3.0
 * Fix spiky drawings (by @maliksenpai)
 * Upgrade to Flutter 3.x
