@@ -196,22 +196,27 @@ class ScratcherState extends State<Scratcher> {
   }
 
   Future<ui.Image> _loadImage(Image image) async {
-    final completer = Completer<ui.Image>();
-    final imageProvider = image.image as dynamic;
-    final key = await imageProvider.obtainKey(ImageConfiguration.empty);
+    // Create a completer to manage the asynchronous operation.
+    final Completer<ui.Image> imageCompleter = Completer<ui.Image>();
 
-    imageProvider.load(key, (
-      Uint8List bytes, {
-      int? cacheWidth,
-      int? cacheHeight,
-      bool? allowUpscaling,
-    }) async {
-      return ui.instantiateImageCodec(bytes);
-    }).addListener(ImageStreamListener((ImageInfo image, _) {
-      completer.complete(image.image);
+    // Obtain the image provider from the Image widget.
+    final ImageProvider imageProvider = image.image;
+
+    // Obtain a key for the image.
+    final imageKey = await imageProvider.obtainKey(ImageConfiguration.empty);
+
+    // Load the image using the obtained key.
+    imageProvider.loadImage(
+      imageKey,
+          (ui.ImmutableBuffer buffer, {ui.TargetImageSizeCallback? getTargetSize}) {
+        return ui.instantiateImageCodecFromBuffer(buffer);
+      },
+    ).addListener(ImageStreamListener((ImageInfo image, _) {
+      imageCompleter.complete(image.image);
     }));
 
-    return completer.future;
+    // Return the future from the completer.
+    return imageCompleter.future;
   }
 
   bool _inCircle(Offset center, Offset point, double radius) {
