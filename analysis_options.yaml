@@ -22,3 +22,4 @@ linter:
     type_annotate_public_apis: false
     # activate this one later on
     constant_identifier_names: false
+    sort_pub_dependencies: false

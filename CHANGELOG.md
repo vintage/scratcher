@@ -1,3 +1,6 @@
+## 2.5.0
+* Fix the scratcher image cover in Flutter 3.16 (by @h1amza)
+
 ## 2.4.0
 * Make scratcher work on iOS with Flutter 3.13+ (by @xrusu)
 

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -208,12 +207,14 @@ class ScratcherState extends State<Scratcher> {
     // Load the image using the obtained key.
     imageProvider.loadImage(
       imageKey,
-          (ui.ImmutableBuffer buffer, {ui.TargetImageSizeCallback? getTargetSize}) {
+      (ui.ImmutableBuffer buffer, {ui.TargetImageSizeCallback? getTargetSize}) {
         return ui.instantiateImageCodecFromBuffer(buffer);
       },
-    ).addListener(ImageStreamListener((ImageInfo image, _) {
-      imageCompleter.complete(image.image);
-    }));
+    ).addListener(
+      ImageStreamListener((ImageInfo image, _) {
+        imageCompleter.complete(image.image);
+      }),
+    );
 
     // Return the future from the completer.
     return imageCompleter.future;
